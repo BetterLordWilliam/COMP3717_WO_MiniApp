@@ -9,7 +9,7 @@ import androidx.navigation.NavController
  * Bookmarked dates/days.
  */
 @Composable
-fun Bookmarks(appNavController: NavController? = null) {
+fun SavedItems(appNavController: NavController? = null) {
     Box {
         Text(text="This is the bookmarks page.")
     }

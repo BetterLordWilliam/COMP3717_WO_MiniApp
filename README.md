@@ -58,6 +58,26 @@ The scope of the application could be to provide the user w/ quick access
 to information regarding any of the above, however I thought it best to start
 w/ a more restricted subset of the games content and go from there -- hence weapons/armour/spells/incantations.
 
+### Weapons
+The schema for weapons is defined as follows
+
+| ATTRIBUTE        |      TYPE      |   DESCRIPTION |
+| ------------- | :-----------: | -----: |
+| id         | `string` | Id of the Weapon |
+| name         | `string` | Name of the Weapon |
+| image         | `string` | Image URL of the Weapon |
+| description         | `string` | Short description of the Weapon |
+| category         | `string` | What category of Weapons. Example: `Axe`, `Sword`, etc. |
+| weight          | `number` | How much the Weapon weights when equipped |
+| attack         | `{ name: string, amount: number }` | How much damage the Weapon does when used as a weapon  |
+| defence         | `{ name: string, amount: number }` | How much damage the Weapon blocks when used to defend an attack  |
+| requiredAttributes         | `{ name: string, amount: number }` | What are the required attribute amount in order to properly use this Weapon. Example: `{ name: "Str", amount: 20 }`  |
+| scalesWith         | `{ name: string, scaling: string }` | How much the Weapon scales and with what attributes. Example: `{ name: "Str", scaling: "B" }`  |
+
+Hence, the data class representing weapons would need to mimic this.
+
+
+
 ---
 ## Part 3: Room Database Setup
 More details about the Room local database.
