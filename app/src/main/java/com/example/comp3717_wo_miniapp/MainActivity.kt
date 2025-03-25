@@ -40,6 +40,7 @@ import com.example.comp3717_wo_miniapp.ui.theme.COMP3717_WO_MiniAppTheme
  *      Elden Ring equipment reference -- quick reference for Spells, Incantations, Weapons, Armour, etc
  * [X]  Setup the navigation scaffolding today.
  * [ ]  Possibly the room db setup as well
+ *          (partially, documented the planned setup for the room db, implement next)
  *          (not too much because I need to figure out the structure of db).
  * [X]  Determine API to use for data
  * [ ]  UI Implementation
