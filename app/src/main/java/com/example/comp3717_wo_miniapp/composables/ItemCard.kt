@@ -43,7 +43,7 @@ private fun MinimisedItemCard(
                 item {
                     Text(
                         text = item.itemData.name,
-                        fontSize = 16.sp,
+                        fontSize = 24.sp,
                         modifier = Modifier
                             .padding(8.dp)
                     )
@@ -78,7 +78,7 @@ private fun MaximisedItemCard(
                 item {
                     Text(
                         text = item.itemData.description,
-                        fontSize = 16.sp,
+                        fontSize = 20.sp,
                         modifier = Modifier
                             .padding(8.dp)
                     )

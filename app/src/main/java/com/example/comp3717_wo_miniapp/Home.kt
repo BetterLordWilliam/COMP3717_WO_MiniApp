@@ -13,10 +13,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -43,9 +50,27 @@ fun Home(
     appNavController: NavController? = null,
     eldenRingUIState: EldenRingUIState? = null,
 ) {
+    var expanded by remember { mutableStateOf(false) }
+
     Column {
         Box {
             Text(text="Elden Ring equipment quick reference.")
+        }
+        Row {
+            TextField("Ermm", {})
+            Box {
+                IconButton(onClick = { expanded = !expanded }) {
+                    Icon(Icons.Default.MoreVert, contentDescription = "More options")
+                }
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false }
+                ) {
+                    DropdownMenuItem(text = { Text("Weapons") }, onClick = {})
+                    DropdownMenuItem(text = { Text("Armour") }, onClick = {})
+                }
+            }
+
         }
         LazyColumn (
             verticalArrangement = Arrangement.spacedBy(10.dp),
