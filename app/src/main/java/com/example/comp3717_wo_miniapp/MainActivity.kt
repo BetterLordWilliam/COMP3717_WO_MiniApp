@@ -18,7 +18,9 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,6 +29,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.comp3717_wo_miniapp.data.EldenRingRepo
+import com.example.comp3717_wo_miniapp.data.eldenRingHttpClient
 import com.example.comp3717_wo_miniapp.ui.theme.COMP3717_WO_MiniAppTheme
 
 /**
@@ -49,13 +53,18 @@ import com.example.comp3717_wo_miniapp.ui.theme.COMP3717_WO_MiniAppTheme
 data class NavItem(val icon: ImageVector, val navRoute: String)
 
 class MainActivity : ComponentActivity() {
+
+    private val eldenRingRepo by lazy { EldenRingRepo(eldenRingHttpClient) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            COMP3717_WO_MiniAppTheme {
-                MainContent()
+            val eldenRingUIState = remember { EldenRingUIState(eldenRingRepo) }
+            LaunchedEffect(eldenRingUIState) {
+                eldenRingUIState.getAllWeapons()
             }
+            MainContent(eldenRingUIState)
         }
     }
 }
@@ -93,7 +102,7 @@ fun BottomNavBar(navController: NavController) {
  * Define and organize the navigation structure for the application.
  */
 @Composable
-fun MainContent() {
+fun MainContent(eldenRingUIState: EldenRingUIState? = null) {
     val appNavController = rememberNavController()
 
     Scaffold(
@@ -104,7 +113,7 @@ fun MainContent() {
             startDestination = "home",
             modifier = Modifier.padding(padding)
         ) {
-            composable("home") { Home(appNavController) }
+            composable("home") { Home(appNavController, eldenRingUIState) }
             composable("bookmarks") { SavedItems(appNavController) }
         }
     }

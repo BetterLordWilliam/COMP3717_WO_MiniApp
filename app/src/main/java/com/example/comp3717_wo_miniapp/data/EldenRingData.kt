@@ -99,3 +99,31 @@ data class Incantation(
     val effects:        String,
     val requires:       List<NumericStatValue>
 )
+
+data class Items(
+    val data:           List<Item>
+)
+
+data class Weapons(
+    val data:           List<Weapon>
+)
+
+data class Armours(
+    val data:           List<Armour>
+)
+
+data class Shields(
+    val data:           List<Shield>
+)
+
+data class Talismans(
+    val data:           List<Talisman>
+)
+
+data class Sorceries(
+    val data:           List<Sorceries>
+)
+
+data class Incantations(
+    val data:           List<Incantation>
+)

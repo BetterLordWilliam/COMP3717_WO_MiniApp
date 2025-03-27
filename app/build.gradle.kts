@@ -51,6 +51,10 @@ dependencies {
     implementation(libs.ktor.client.content.negotiation)
     implementation(libs.ktor.serialization.gson)
 
+    // Coil dependencies
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
+
     // Android compose and activity stuff
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
