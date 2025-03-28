@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.example.comp3717_wo_miniapp.composables.ItemCard
+import com.example.comp3717_wo_miniapp.composables.ItemList
 import com.example.comp3717_wo_miniapp.data.EldenRingRepo
 import com.example.comp3717_wo_miniapp.data.Weapon
 
@@ -72,17 +73,6 @@ fun Home(
             }
 
         }
-        LazyColumn (
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-            // modifier = Modifier.ver
-        ) {
-            eldenRingUIState?.weapons?.let {
-                items(it) { item ->
-                    ItemCard(item)
-                }
-            } ?: item {
-                Text("Spinner ...")
-            }
-        }
+        ItemList(eldenRingUIState?.weapons)
     }
 }

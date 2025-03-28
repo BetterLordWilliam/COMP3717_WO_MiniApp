@@ -3,6 +3,13 @@ package com.example.comp3717_wo_miniapp.data
 import com.google.gson.annotations.SerializedName
 
 
+interface ItemData {
+    val id:             String
+    val name:           String
+    val description:    String
+    val imageUrl:       String
+}
+
 data class NumericStatValue (
     val name: String,
     val amount: Int
@@ -13,22 +20,22 @@ data class StringStatValue (
     val scaling: String
 )
 
-data class Item(
-    val id:             String,
-    val name:           String,
+data class Item (
+    override val id:             String,
+    override val name:           String,
     @SerializedName("image")
-    val imageUrl:       String,
-    val description:    String,
+    override val imageUrl:       String,
+    override val description:    String,
     val type:           String,
     val effect:         String
-)
+) : ItemData
 
 data class Weapon (
-    val id:             String,
-    val name:           String,
+    override val id:             String,
+    override val name:           String,
     @SerializedName("image")
-    val imageUrl:       String,
-    val description:    String,
+    override val imageUrl:       String,
+    override val description:    String,
     val category:       String,
     val weight:         Double,
     val attack:         List<NumericStatValue>,
@@ -36,26 +43,26 @@ data class Weapon (
     @SerializedName("requiredAttributes")
     val reqAt:          List<NumericStatValue>,
     val scalesWith:     List<StringStatValue>
-)
+) : ItemData
 
 data class Armour(
-    val id:             String,
-    val name:           String,
+    override val id:             String,
+    override val name:           String,
     @SerializedName("image")
-    val imageUrl:       String,
-    val description:    String,
+    override val imageUrl:       String,
+    override val description:    String,
     val category:       String,
     val weight:         Double,
     val dmgNegation:    List<NumericStatValue>,
     val resistance:     List<NumericStatValue>
-)
+) : ItemData
 
 data class Shield(
-    val id:             String,
-    val name:           String,
+    override val id:             String,
+    override val name:           String,
     @SerializedName("image")
-    val imageUrl:       String,
-    val description:    String,
+    override val imageUrl:       String,
+    override val description:    String,
     val category:       String,
     val weight:         Double,
     val attack:         List<NumericStatValue>,
@@ -63,42 +70,42 @@ data class Shield(
     @SerializedName("requiredAttributes")
     val reqAt:          List<NumericStatValue>,
     val scalesWith:     List<StringStatValue>
-)
+) : ItemData
 
 data class Talisman(
-    val id:             String,
-    val name:           String,
+    override val id:             String,
+    override val name:           String,
     @SerializedName("image")
-    val imageUrl:       String,
-    val description:    String,
+    override val imageUrl:       String,
+    override val description:    String,
     val effects:        String
-)
+) : ItemData
 
 data class Sorcery(
-    val id:             String,
-    val name:           String,
+    override val id:             String,
+    override val name:           String,
     @SerializedName("image")
-    val imageUrl:       String,
-    val description:    String,
+    override val imageUrl:       String,
+    override val description:    String,
     val type:           String,
     val cost:           Int,
     val slots:          Int,
     val effects:        String,
     val requires:       List<NumericStatValue>
-)
+) : ItemData
 
 data class Incantation(
-    val id:             String,
-    val name:           String,
+    override val id:             String,
+    override val name:           String,
     @SerializedName("image")
-    val imageUrl:       String,
-    val description:    String,
+    override val imageUrl:       String,
+    override val description:    String,
     val type:           String,
     val cost:           Int,
     val slots:          Int,
     val effects:        String,
     val requires:       List<NumericStatValue>
-)
+) : ItemData
 
 data class Items(
     val data:           List<Item>
