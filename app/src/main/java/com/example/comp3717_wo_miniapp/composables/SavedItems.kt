@@ -1,4 +1,4 @@
-package com.example.comp3717_wo_miniapp
+package com.example.comp3717_wo_miniapp.composables
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.Text

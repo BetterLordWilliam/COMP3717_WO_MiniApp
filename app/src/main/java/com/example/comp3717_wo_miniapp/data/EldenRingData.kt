@@ -12,7 +12,7 @@ interface ItemData {
 
 data class NumericStatValue (
     val name: String,
-    val amount: Int
+    val amount: Double
 )
 
 data class StringStatValue (

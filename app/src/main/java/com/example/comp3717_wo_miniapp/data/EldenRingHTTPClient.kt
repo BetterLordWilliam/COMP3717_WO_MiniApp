@@ -19,7 +19,9 @@ const val INCANTATION               = "$ENDPOINT/incantations"
 // Define specific query template strings
 const val FETCH_BY_ID               = "%s/%s"
 const val NAME_SEARCH               = "%s?name=%s"
-const val NAME_SEARCH_PAG           = "%s?name=%s&limit=%d&page=%d"
+const val NAME_SEARCH_PAG           = "%s?name=%s&page=%d"
+const val TYPE_PAG                  = "%s?page=%d"
+// const val NAME_SEARCH_PAG           = "%s?name=%s&limit=%d&page=%d"
 
 // Initialize the HTTP client
 val eldenRingHttpClient = HttpClient {

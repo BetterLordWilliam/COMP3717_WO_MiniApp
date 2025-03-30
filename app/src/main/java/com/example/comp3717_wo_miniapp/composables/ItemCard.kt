@@ -16,12 +16,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
-import com.example.comp3717_wo_miniapp.ItemCardUIState
+import com.example.comp3717_wo_miniapp.states.ItemState
 import com.example.comp3717_wo_miniapp.data.ItemData
 
 @Composable
 private fun <T : ItemData> MinimisedItemCard(
-    item: ItemCardUIState<T>
+    item: ItemState<T>
 ) {
     Row (
         modifier = Modifier
@@ -56,7 +56,7 @@ private fun <T : ItemData> MinimisedItemCard(
 
 @Composable
 private fun <T : ItemData> MaximisedItemCard(
-    item: ItemCardUIState<T>
+    item: ItemState<T>
 ) {
     Row (
         modifier = Modifier
@@ -91,7 +91,7 @@ private fun <T : ItemData> MaximisedItemCard(
 
 @Composable
 fun <T : ItemData> ItemCard(
-    item: ItemCardUIState<T>
+    item: ItemState<T>
 ) {
     Card (
         onClick = { item.expanded = !item.expanded; println(item.expanded) },
@@ -99,6 +99,6 @@ fun <T : ItemData> ItemCard(
             .fillMaxWidth()
             .height(if (item.expanded) 162.dp else 81.dp)
     ) {
-        if (item.expanded) MaximisedItemCard(item) else MinimisedItemCard(item)
+        if (item.expanded) MaximisedItemCard<T>(item) else MinimisedItemCard<T>(item)
     }
 }
