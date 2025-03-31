@@ -128,7 +128,7 @@ data class Talismans(
 )
 
 data class Sorceries(
-    val data:           List<Sorceries>
+    val data:           List<Sorcery>
 )
 
 data class Incantations(

@@ -13,6 +13,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,16 +28,20 @@ fun HomeSearch(
     eldenRingUIState: EldenRingUIState? = null
 ) {
     var expanded by remember { mutableStateOf(false) }
-    val coroutineScope = rememberCoroutineScope()
     val currentThing = eldenRingUIState?.selected?.value
+
+    LaunchedEffect(currentThing?.searchTerms?.value) {
+        currentThing?.page?.intValue = 0
+        currentThing?.getItems()
+    }
 
     Row (modifier = Modifier.fillMaxWidth()) {
         currentThing?.searchTerms?.value?.let {
             TextField(
                 value = it,
                 placeholder = { Text("Ermm") },
-                onValueChange = {
-                    eldenRingUIState.selected.value.searchTerms.value = it
+                onValueChange = { searchString ->
+                    eldenRingUIState.selected.value.searchTerms.value = searchString
                 },
                 singleLine = true
             )
@@ -44,9 +49,7 @@ fun HomeSearch(
 
         IconButton(onClick = {
             if (currentThing?.searchTerms?.value?.isNotBlank() == true) {
-                coroutineScope.launch {
-                    eldenRingUIState.selected.value.getItems()
-                }
+                eldenRingUIState.selected.value.page.intValue = 0
             }
         }) {
             Icon(Icons.Default.Search, contentDescription = "Search items")
@@ -61,7 +64,7 @@ fun HomeSearch(
                 onDismissRequest = { expanded = false }
             ) {
                 eldenRingUIState?.itemGroups?.map {
-                    DropdownMenuItem(text = {Text(it.key)}, onClick = {
+                    DropdownMenuItem(text = { Text(it.key) }, onClick = {
                         eldenRingUIState.selected.value = it.value
                     })
                 } ?: Text("No item types")

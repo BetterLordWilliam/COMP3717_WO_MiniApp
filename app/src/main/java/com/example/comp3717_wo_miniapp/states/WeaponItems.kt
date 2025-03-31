@@ -7,19 +7,10 @@ import com.example.comp3717_wo_miniapp.data.EldenRingRepo
 import com.example.comp3717_wo_miniapp.data.Weapon
 
 class WeaponItems(override val repo: EldenRingRepo) : EldenRingItemGroup<Weapon> {
+
     override val items = mutableStateListOf<ItemState<Weapon>>()
     override var page = mutableIntStateOf(0)
     override var searchTerms = mutableStateOf("")
-
-    override fun incrementPage() {
-        page.intValue++
-    }
-
-    override fun decrementPage() {
-        if (page.intValue == 0)
-            return
-        page.intValue--
-    }
 
     override suspend fun getItems() {
         val weaponsRes = repo.getWeapons(searchTerms.value, page.intValue)

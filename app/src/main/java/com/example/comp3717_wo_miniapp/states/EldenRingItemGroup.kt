@@ -12,8 +12,14 @@ interface EldenRingItemGroup <T : ItemData> {
     var page : MutableIntState
     var searchTerms : MutableState<String>
 
-    fun incrementPage()
-    fun decrementPage()
+    fun incrementPage() {
+        page.intValue++
+    }
+    fun decrementPage() {
+        if (page.intValue == 0)
+            return
+        page.intValue--
+    }
 
     suspend fun getItems()
 }

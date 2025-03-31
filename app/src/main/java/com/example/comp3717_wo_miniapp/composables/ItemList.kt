@@ -18,6 +18,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,7 +32,9 @@ import kotlinx.coroutines.launch
 fun <T : ItemData> CounterRow(
     eldenRingItemGroup: EldenRingItemGroup<T>?
 ) {
-    val coroutineScope = rememberCoroutineScope()
+    LaunchedEffect(eldenRingItemGroup?.page?.intValue) {
+        eldenRingItemGroup?.getItems()
+    }
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -39,26 +42,18 @@ fun <T : ItemData> CounterRow(
     ) {
         IconButton(onClick = {
             eldenRingItemGroup?.decrementPage()
-            coroutineScope.launch {
-                eldenRingItemGroup?.getItems()
-            }
-        }) { // Assuming you have access to your ViewModel
-            Icon(Icons.Filled.KeyboardArrowLeft, contentDescription = null)
+        }) {
+            Icon(Icons.Filled.KeyboardArrowLeft, contentDescription = "Navigate back through results")
         }
 
         Spacer(modifier = Modifier.weight(1f))
-
         Text(text = "${eldenRingItemGroup?.page?.intValue}")
 
         Spacer(modifier = Modifier.weight(1f))
-
         IconButton(onClick = {
             eldenRingItemGroup?.incrementPage()
-            coroutineScope.launch {
-                eldenRingItemGroup?.getItems()
-            }
         }) {
-            Icon(Icons.Filled.KeyboardArrowRight, contentDescription = null)
+            Icon(Icons.Filled.KeyboardArrowRight, contentDescription = "Navigate forward through results")
         }
     }
 }

@@ -56,12 +56,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val eldenRingUIState = remember { EldenRingUIState(eldenRingRepo) }
-
-            LaunchedEffect(eldenRingUIState) {
-                eldenRingUIState.weapons.getItems()
-                eldenRingUIState.armours.getItems()
+            LaunchedEffect(eldenRingUIState.selected.value) {
+                eldenRingUIState.selected.value.getItems()
             }
-
             MainContent(eldenRingUIState)
         }
     }
