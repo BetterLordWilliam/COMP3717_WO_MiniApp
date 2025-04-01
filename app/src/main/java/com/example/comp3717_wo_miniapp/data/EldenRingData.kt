@@ -2,8 +2,8 @@ package com.example.comp3717_wo_miniapp.data
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
-
 
 interface ItemData {
     val id:             String
@@ -12,16 +12,20 @@ interface ItemData {
     val imageUrl:       String
 }
 
+interface ItemGroup <T : ItemData> {
+    val data:           List<T>
+}
+
 @Entity(tableName = "er_number_stats")
 data class NumericStatValue (
-    val name:       String,
-    val amount:     Double
+    val name:           String,
+    val amount:         Double
 )
 
 @Entity(tableName = "er_string_stats")
 data class StringStatValue (
-    val name:       String,
-    val scaling:    String
+    val name:           String,
+    val scaling:        String
 )
 
 @Entity(tableName = "er_items")
@@ -125,30 +129,30 @@ data class Incantation(
     val requires:       List<NumericStatValue>
 ) : ItemData
 
-data class Items(
-    val data:           List<Item>
-)
-
 data class Weapons(
-    val data:           List<Weapon>
-)
+    override val data: List<Weapon>
+) : ItemGroup<Weapon>
 
 data class Armours(
-    val data:           List<Armour>
-)
+    override val data: List<Armour>
+) : ItemGroup<Armour>
 
 data class Shields(
-    val data:           List<Shield>
-)
-
-data class Talismans(
-    val data:           List<Talisman>
-)
+    override val data: List<Shield>
+) : ItemGroup<Shield>
 
 data class Sorceries(
-    val data:           List<Sorcery>
-)
+    override val data: List<Sorcery>
+) : ItemGroup<Sorcery>
 
 data class Incantations(
-    val data:           List<Incantation>
-)
+    override val data: List<Incantation>
+) : ItemGroup<Incantation>
+
+data class Talismans(
+    override val data : List<Talisman>
+) : ItemGroup<Talisman>
+
+data class Items(
+    override val data: List<Item>
+) : ItemGroup<Item>

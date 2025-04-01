@@ -1,7 +1,5 @@
 package com.example.comp3717_wo_miniapp.composables
 
-import android.annotation.SuppressLint
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -19,18 +17,16 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.comp3717_wo_miniapp.states.EldenRingItemGroup
 import com.example.comp3717_wo_miniapp.data.ItemData
-import kotlinx.coroutines.launch
+import com.example.comp3717_wo_miniapp.states.itemstates.EldenRingItemState
 
 @Composable
 fun <T : ItemData> CounterRow(
-    eldenRingItemGroup: EldenRingItemGroup<T>?
+    eldenRingItemGroup: EldenRingItemState<T>?
 ) {
     LaunchedEffect(eldenRingItemGroup?.page?.intValue) {
         eldenRingItemGroup?.getItems()
@@ -47,9 +43,11 @@ fun <T : ItemData> CounterRow(
         }
 
         Spacer(modifier = Modifier.weight(1f))
+
         Text(text = "${eldenRingItemGroup?.page?.intValue}")
 
         Spacer(modifier = Modifier.weight(1f))
+
         IconButton(onClick = {
             eldenRingItemGroup?.incrementPage()
         }) {
@@ -60,7 +58,7 @@ fun <T : ItemData> CounterRow(
 
 @Composable
 fun <T : ItemData> ItemList(
-    eldenRingItemGroup: EldenRingItemGroup<T>?,
+    eldenRingItemState: EldenRingItemState<T>?,
 ) {
     Box (
         modifier = Modifier
@@ -69,8 +67,12 @@ fun <T : ItemData> ItemList(
         LazyColumn (
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            items(eldenRingItemGroup!!.items) {
-                ItemCard(it)
+            items(eldenRingItemState!!.items) {
+                ItemCard(it, onInfoButton = {
+                    // eldenRingItemState.GetInfoPage(it.itemData)
+                }, onSaveButton = {
+                    eldenRingItemState.saveItem(it.itemData)
+                })
             }
         }
         Surface (
@@ -80,7 +82,7 @@ fun <T : ItemData> ItemList(
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
         ) {
-            CounterRow(eldenRingItemGroup)
+            CounterRow(eldenRingItemState)
         }
     }
 }

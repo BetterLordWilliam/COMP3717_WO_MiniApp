@@ -24,9 +24,18 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.comp3717_wo_miniapp.composables.Home
 import com.example.comp3717_wo_miniapp.composables.SavedItems
-import com.example.comp3717_wo_miniapp.data.EldenRingRepo
+import com.example.comp3717_wo_miniapp.data.ItemData
 import com.example.comp3717_wo_miniapp.data.eldenRingHttpClient
+import com.example.comp3717_wo_miniapp.data.repositories.ArmourRepository
+import com.example.comp3717_wo_miniapp.data.repositories.IncantationRepository
+import com.example.comp3717_wo_miniapp.data.repositories.ItemsRepository
+import com.example.comp3717_wo_miniapp.data.repositories.ShieldRepository
+import com.example.comp3717_wo_miniapp.data.repositories.SorceryRepository
+import com.example.comp3717_wo_miniapp.data.repositories.TalismanRepository
+import com.example.comp3717_wo_miniapp.data.repositories.WeaponRepository
 import com.example.comp3717_wo_miniapp.states.EldenRingUIState
+import com.example.comp3717_wo_miniapp.states.itemstates.BasicItemActions
+import com.example.comp3717_wo_miniapp.states.itemstates.EldenRingItemState
 
 /**
  * Will Otterbein
@@ -47,18 +56,55 @@ import com.example.comp3717_wo_miniapp.states.EldenRingUIState
 
 data class NavItem(val icon: ImageVector, val navRoute: String)
 
+/**
+ * Enum to store keys.
+ */
+enum class ItemType(val enumValue : String) {
+    WEAPON("weapons"),
+    ARMOUR("armours"),
+    SHIELD("shields"),
+    SORCERY("sorceries"),
+    INCANTATION("incantations"),
+    TALISMAN("talismans"),
+    ITEM("items")
+}
+
 class MainActivity : ComponentActivity() {
 
-    private val eldenRingRepo by lazy { EldenRingRepo(eldenRingHttpClient) }
+    private val weaponRepo      by lazy { WeaponRepository(eldenRingHttpClient) }
+    private val armourRepo      by lazy { ArmourRepository(eldenRingHttpClient) }
+    private val shieldRepo      by lazy { ShieldRepository(eldenRingHttpClient) }
+    private val sorceryRepo     by lazy { SorceryRepository(eldenRingHttpClient) }
+    private val incantationRepo by lazy { IncantationRepository(eldenRingHttpClient) }
+    private val talismanRepo    by lazy { TalismanRepository(eldenRingHttpClient) }
+    private val itemsRepo       by lazy { ItemsRepository(eldenRingHttpClient) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val eldenRingUIState = remember { EldenRingUIState(eldenRingRepo) }
-            LaunchedEffect(eldenRingUIState.selected.value) {
-                eldenRingUIState.selected.value.getItems()
+            val basicActions = remember {
+                BasicItemActions()
             }
+
+            val eldenRingItemStates = remember {
+                mapOf(
+                    ItemType.WEAPON         to EldenRingItemState(weaponRepo, basicActions),
+                    ItemType.ARMOUR         to EldenRingItemState(armourRepo, basicActions),
+                    ItemType.SHIELD         to EldenRingItemState(shieldRepo, basicActions),
+                    ItemType.SORCERY        to EldenRingItemState(sorceryRepo, basicActions),
+                    ItemType.INCANTATION    to EldenRingItemState(incantationRepo, basicActions),
+                    ItemType.TALISMAN       to EldenRingItemState(talismanRepo, basicActions),
+                    ItemType.ITEM           to EldenRingItemState(itemsRepo, basicActions)
+                )
+            }
+
+            val eldenRingUIState = remember { EldenRingUIState(eldenRingItemStates) }
+
+            LaunchedEffect(eldenRingUIState.selected.value) {
+                eldenRingUIState.selected.value?.getItems()
+            }
+
             MainContent(eldenRingUIState)
         }
     }

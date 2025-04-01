@@ -41,18 +41,10 @@ fun HomeSearch(
                 value = it,
                 placeholder = { Text("Ermm") },
                 onValueChange = { searchString ->
-                    eldenRingUIState.selected.value.searchTerms.value = searchString
+                    eldenRingUIState.selected.value!!.searchTerms.value = searchString
                 },
                 singleLine = true
             )
-        }
-
-        IconButton(onClick = {
-            if (currentThing?.searchTerms?.value?.isNotBlank() == true) {
-                eldenRingUIState.selected.value.page.intValue = 0
-            }
-        }) {
-            Icon(Icons.Default.Search, contentDescription = "Search items")
         }
 
         Box {
@@ -63,8 +55,8 @@ fun HomeSearch(
                 expanded = expanded,
                 onDismissRequest = { expanded = false }
             ) {
-                eldenRingUIState?.itemGroups?.map {
-                    DropdownMenuItem(text = { Text(it.key) }, onClick = {
+                eldenRingUIState?.itemStates?.map {
+                    DropdownMenuItem(text = { Text(it.key.enumValue) }, onClick = {
                         eldenRingUIState.selected.value = it.value
                     })
                 } ?: Text("No item types")
