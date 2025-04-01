@@ -1,0 +1,5 @@
+Android docs
+
+
+Stack overflows
+https://stackoverflow.com/questions/44117970/kotlin-data-class-from-json-using-gson
