@@ -2,11 +2,12 @@ package com.example.comp3717_wo_miniapp.states.itemstates
 
 import androidx.compose.runtime.Composable
 import com.example.comp3717_wo_miniapp.data.ItemData
+import com.example.comp3717_wo_miniapp.data.repositories.EldenRingHttpRepository
 
-interface EldenRingItemActions {
+interface EldenRingItemActions <T : ItemData> {
 
     @Composable
-    fun <T : ItemData> GetItemInfo (item : T)
+    fun GetItemInfo(item: T, onCloseAction: () -> Unit)
 
-    fun <T : ItemData> saveItem(item : T)
+    fun saveItem(item : T, eldenRingHttpRepository: EldenRingHttpRepository<T>)
 }

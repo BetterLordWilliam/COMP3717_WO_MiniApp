@@ -34,8 +34,13 @@ import com.example.comp3717_wo_miniapp.data.repositories.SorceryRepository
 import com.example.comp3717_wo_miniapp.data.repositories.TalismanRepository
 import com.example.comp3717_wo_miniapp.data.repositories.WeaponRepository
 import com.example.comp3717_wo_miniapp.states.EldenRingUIState
+import com.example.comp3717_wo_miniapp.states.itemstates.ArmourItemActions
 import com.example.comp3717_wo_miniapp.states.itemstates.BasicItemActions
 import com.example.comp3717_wo_miniapp.states.itemstates.EldenRingItemState
+import com.example.comp3717_wo_miniapp.states.itemstates.IncantationItemActions
+import com.example.comp3717_wo_miniapp.states.itemstates.SorceryItemActions
+import com.example.comp3717_wo_miniapp.states.itemstates.WeaponItemActions
+import com.example.comp3717_wo_miniapp.states.itemstates.old.ShieldItemActions
 
 /**
  * Will Otterbein
@@ -83,19 +88,15 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val basicActions = remember {
-                BasicItemActions()
-            }
-
             val eldenRingItemStates = remember {
                 mapOf(
-                    ItemType.WEAPON         to EldenRingItemState(weaponRepo, basicActions),
-                    ItemType.ARMOUR         to EldenRingItemState(armourRepo, basicActions),
-                    ItemType.SHIELD         to EldenRingItemState(shieldRepo, basicActions),
-                    ItemType.SORCERY        to EldenRingItemState(sorceryRepo, basicActions),
-                    ItemType.INCANTATION    to EldenRingItemState(incantationRepo, basicActions),
-                    ItemType.TALISMAN       to EldenRingItemState(talismanRepo, basicActions),
-                    ItemType.ITEM           to EldenRingItemState(itemsRepo, basicActions)
+                    ItemType.WEAPON         to EldenRingItemState(weaponRepo, WeaponItemActions()),
+                    ItemType.ARMOUR         to EldenRingItemState(armourRepo, ArmourItemActions()),
+                    ItemType.SHIELD         to EldenRingItemState(shieldRepo, ShieldItemActions()),
+                    ItemType.SORCERY        to EldenRingItemState(sorceryRepo, SorceryItemActions()),
+                    ItemType.INCANTATION    to EldenRingItemState(incantationRepo, IncantationItemActions()),
+                    ItemType.TALISMAN       to EldenRingItemState(talismanRepo, BasicItemActions()),
+                    ItemType.ITEM           to EldenRingItemState(itemsRepo, BasicItemActions())
                 )
             }
 

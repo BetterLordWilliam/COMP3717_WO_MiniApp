@@ -2,9 +2,11 @@ package com.example.comp3717_wo_miniapp.composables
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -15,8 +17,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -59,30 +66,64 @@ fun <T : ItemData> CounterRow(
 @Composable
 fun <T : ItemData> ItemList(
     eldenRingItemState: EldenRingItemState<T>?,
+
 ) {
+    var showInfo by remember { mutableStateOf(false) }
+
+    LaunchedEffect(eldenRingItemState?.searchTerms?.value) {
+        eldenRingItemState?.page?.intValue = 0
+        eldenRingItemState?.getItems()
+    }
+
     Box (
         modifier = Modifier
             .fillMaxHeight()
     ) {
-        LazyColumn (
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-        ) {
-            items(eldenRingItemState!!.items) {
-                ItemCard(it, onInfoButton = {
-                    // eldenRingItemState.GetInfoPage(it.itemData)
-                }, onSaveButton = {
-                    eldenRingItemState.saveItem(it.itemData)
-                })
+        Column (modifier = Modifier.fillMaxWidth()) {
+            eldenRingItemState?.searchTerms?.value?.let {
+                TextField(
+                    value = it,
+                    placeholder = { Text("Search for items...") },
+                    onValueChange = { searchString ->
+                        eldenRingItemState.searchTerms.value = searchString
+                    },
+                    singleLine = true,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                )
+            }
+            LazyColumn (
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+            ) {
+                items(eldenRingItemState!!.items) {
+                    ItemCard(it, onInfoButton = {
+                        // eldenRingItemState.GetInfoPage(it.itemData)
+                        eldenRingItemState.showInfoFor.value = it.itemData
+                        showInfo = true
+                    }, onSaveButton = {
+                        eldenRingItemState.saveItem(it.itemData, eldenRingItemState.repo)
+                    })
+                }
             }
         }
-        Surface (
-            shadowElevation = 8.dp,
-            color = Color(0x00FFFFFF),
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter)
-        ) {
-            CounterRow(eldenRingItemState)
+
+        if (showInfo) {
+            Surface (
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                eldenRingItemState?.GetItemInfo(eldenRingItemState.showInfoFor.value!!) {
+                    showInfo = false
+                }
+            }
+        } else {
+            Surface (
+                shadowElevation = 8.dp,
+                color = Color(0x00FFFFFF),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomEnd)
+            ) { CounterRow(eldenRingItemState) }
         }
     }
 }

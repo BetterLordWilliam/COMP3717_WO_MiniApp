@@ -7,15 +7,16 @@ import com.example.comp3717_wo_miniapp.data.ItemData
 import com.example.comp3717_wo_miniapp.data.repositories.EldenRingHttpRepository
 import com.example.comp3717_wo_miniapp.states.ItemCardState
 
-class EldenRingItemState <T : ItemData> (
+class EldenRingItemState <T : ItemData>(
     val repo:           EldenRingHttpRepository<T>,
-    val itemActions:    EldenRingItemActions
+    private val itemActions: EldenRingItemActions<T>
 
-) : EldenRingItemActions by itemActions {
+) : EldenRingItemActions<T> by itemActions {
 
     val items = mutableStateListOf<ItemCardState<T>>()
     var page = mutableIntStateOf(0 )
     var searchTerms = mutableStateOf("")
+    var showInfoFor = mutableStateOf<T?>(null)
 
     fun incrementPage() {
         page.intValue++
