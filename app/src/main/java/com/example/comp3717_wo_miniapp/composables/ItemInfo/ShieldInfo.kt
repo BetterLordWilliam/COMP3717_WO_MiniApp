@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Icon
@@ -30,20 +32,21 @@ import com.example.comp3717_wo_miniapp.data.Weapon
 
 
 @Composable
-private fun ItemInfoReal(itemData: Shield) {
+fun ShieldInfo(shield: Shield) {
     Column (
         verticalArrangement = Arrangement.spacedBy(14.dp),
         modifier = Modifier
             .fillMaxHeight()
             .padding(16.dp)
+            .verticalScroll(rememberScrollState(0))
     ) {
         Column {
             Text(
                 style = MaterialTheme.typography.titleLarge,
-                text = itemData.name
+                text = shield.name
             )
             AsyncImage(
-                model = itemData.imageUrl,
+                model = shield.imageUrl,
                 contentDescription = "Item image",
                 modifier = Modifier
                     .width(124.dp)
@@ -62,7 +65,7 @@ private fun ItemInfoReal(itemData: Shield) {
                 ) {
                     Text(
                         style = MaterialTheme.typography.bodyLarge,
-                        text = itemData.description,
+                        text = shield.description,
                     )
                 }
                 Row (
@@ -70,42 +73,20 @@ private fun ItemInfoReal(itemData: Shield) {
                     modifier = Modifier
                         .fillMaxWidth()
                 ) {
-                    Text("Category: ${itemData.category}")
-                    Text("Weight: ${itemData.weight}")
+                    Text("Category: ${shield.category}")
+                    Text("Weight: ${shield.weight}")
                 }
             }
         }
 
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
+        Column(
+            verticalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth(),
         ) {
-            NumericStatsGridSection(title = "Attack", data = itemData.attack)
-            NumericStatsGridSection(title = "Defense", data = itemData.defence)
-        }
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            NumericStatsGridSection(title = "Requirements", data = itemData.reqAt)
-            StringStatsGridSection(title = "Scales With", data = itemData.scalesWith)
-        }
-    }
-}
-
-/**
- * Item specific information page.
- */
-@Composable
-fun ShieldInfo (itemData: Shield, onCloseAction: () -> Unit) {
-    Box {
-        ItemInfoReal(itemData)
-        IconButton(
-            onCloseAction,
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-        ) {
-            Icon(Icons.Default.Clear, contentDescription = "Dismiss")
+            NumericStatsGridSection(title = "Attack", data = shield.attack)
+            NumericStatsGridSection(title = "Defense", data = shield.defence)
+            NumericStatsGridSection(title = "Requirements", data = shield.reqAt)
+            StringStatsGridSection(title = "Scales With", data = shield.scalesWith)
         }
     }
 }

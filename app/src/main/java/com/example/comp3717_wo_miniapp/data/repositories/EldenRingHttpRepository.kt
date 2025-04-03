@@ -8,7 +8,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 
-abstract class EldenRingHttpRepository <T : ItemData> {
+abstract class EldenRingHttpRepository {
 
     abstract val eldenRingHttpClient: HttpClient
 
@@ -19,15 +19,17 @@ abstract class EldenRingHttpRepository <T : ItemData> {
      */
     suspend fun getItemsJson(
         endpointString :    String,
-        searchTerms :       String? = null,
+        searchTerms :       String? = "",
         page :              Int     = 0
     ) : String {
         val response = eldenRingHttpClient.get(NAME_SEARCH_PAG.format(endpointString, searchTerms, page))
         val json = response.body<JsonObject>().toString()
+        println(json)
+        println(NAME_SEARCH_PAG.format(endpointString, searchTerms, page))
         return json
     }
 
-    abstract suspend fun getItems(searchTerms : String? = null, page : Int = 0) : ItemGroup<T>
-    abstract suspend fun getItem(itemId : String) : T
+    abstract suspend fun getItems(searchTerms : String? = "", page : Int = 0) : List<ItemData>
+    abstract suspend fun getItem(itemId : String) : ItemData
 
 }

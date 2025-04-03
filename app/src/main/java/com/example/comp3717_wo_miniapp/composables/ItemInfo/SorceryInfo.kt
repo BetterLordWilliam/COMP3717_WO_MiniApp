@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Icon
@@ -29,20 +31,21 @@ import com.example.comp3717_wo_miniapp.data.Sorcery
 import com.example.comp3717_wo_miniapp.data.Weapon
 
 @Composable
-private fun ItemInfoReal(itemData: Sorcery) {
+fun SorceryInfo(sorcery: Sorcery) {
     Column (
         verticalArrangement = Arrangement.spacedBy(14.dp),
         modifier = Modifier
             .fillMaxHeight()
             .padding(16.dp)
+            .verticalScroll(rememberScrollState(0))
     ) {
         Column {
             Text(
                 style = MaterialTheme.typography.titleLarge,
-                text = itemData.name
+                text = sorcery.name
             )
             AsyncImage(
-                model = itemData.imageUrl,
+                model = sorcery.imageUrl,
                 contentDescription = "Item image",
                 modifier = Modifier
                     .width(124.dp)
@@ -61,7 +64,7 @@ private fun ItemInfoReal(itemData: Sorcery) {
                 ) {
                     Text(
                         style = MaterialTheme.typography.bodyLarge,
-                        text = itemData.description,
+                        text = sorcery.description,
                     )
                 }
                 Box (
@@ -70,35 +73,18 @@ private fun ItemInfoReal(itemData: Sorcery) {
                         .border(1.dp, Color.LightGray, RoundedCornerShape(4.dp))
                         .padding(4.dp)
                 ) {
-                    Text(text = itemData.effects, style = MaterialTheme.typography.bodyLarge)
+                    Text(text = sorcery.effects, style = MaterialTheme.typography.bodyLarge)
                 }
                 Row (
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     modifier = Modifier
                         .fillMaxWidth()
                 ) {
-                    Text("Cost: ${itemData.cost}")
-                    Text("Slots: ${itemData.slots}")
+                    Text("Cost: ${sorcery.cost}")
+                    Text("Slots: ${sorcery.slots}")
                 }
             }
         }
-        NumericStatsGridSection(title = "Requirements", data = itemData.requires)
-    }
-}
-
-/**
- * Item specific information page.
- */
-@Composable
-fun SorceryInfo (itemData: Sorcery, onCloseAction: () -> Unit) {
-    Box {
-        ItemInfoReal(itemData)
-        IconButton(
-            onCloseAction,
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-        ) {
-            Icon(Icons.Default.Clear, contentDescription = "Dismiss")
-        }
+        NumericStatsGridSection(title = "Requirements", data = sorcery.requires)
     }
 }

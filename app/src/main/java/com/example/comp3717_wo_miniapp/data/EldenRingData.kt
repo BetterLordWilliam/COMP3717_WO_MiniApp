@@ -12,8 +12,8 @@ interface ItemData {
     val imageUrl:       String
 }
 
-interface ItemGroup <T : ItemData> {
-    val data:           List<T>
+interface ItemGroup {
+    val data:           List<ItemData>
 }
 
 @Entity(tableName = "er_number_stats")
@@ -131,28 +131,28 @@ data class Incantation(
 
 data class Weapons(
     override val data: List<Weapon>
-) : ItemGroup<Weapon>
+) : ItemGroup
 
 data class Armours(
     override val data: List<Armour>
-) : ItemGroup<Armour>
+) : ItemGroup
 
 data class Shields(
     override val data: List<Shield>
-) : ItemGroup<Shield>
+) : ItemGroup
 
 data class Sorceries(
     override val data: List<Sorcery>
-) : ItemGroup<Sorcery>
+) : ItemGroup
 
 data class Incantations(
     override val data: List<Incantation>
-) : ItemGroup<Incantation>
+) : ItemGroup
 
 data class Talismans(
     override val data : List<Talisman>
-) : ItemGroup<Talisman>
+) : ItemGroup
 
 data class Items(
     override val data: List<Item>
-) : ItemGroup<Item>
+) : ItemGroup

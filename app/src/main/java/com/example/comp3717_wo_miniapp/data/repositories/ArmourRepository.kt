@@ -9,16 +9,16 @@ import io.ktor.client.HttpClient
 class ArmourRepository(
     override val eldenRingHttpClient: HttpClient
 
-) : EldenRingHttpRepository<Armour>() {
+) : EldenRingHttpRepository() {
 
     /**
      * Get all armours.
      * Optional, specify keywords
      * Optional, specify page of results
      */
-    override suspend fun getItems(searchTerms: String?, page: Int): Armours {
+    override suspend fun getItems(searchTerms: String?, page: Int): List<Armour> {
         val responseJson = super.getItemsJson(ARMOUR, searchTerms, page)
-        return Gson().fromJson(responseJson, Armours::class.java)
+        return Gson().fromJson(responseJson, Armours::class.java).data
     }
 
     /**

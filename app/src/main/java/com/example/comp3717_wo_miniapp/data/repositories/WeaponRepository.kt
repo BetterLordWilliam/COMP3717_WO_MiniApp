@@ -10,16 +10,20 @@ import io.ktor.client.HttpClient
 class WeaponRepository (
     override val eldenRingHttpClient: HttpClient
 
-) : EldenRingHttpRepository<Weapon>() {
+) : EldenRingHttpRepository() {
 
     /**
-     * Get all weapons
+     * Get all weapons.
+     *
      * Optional, specify keywords
      * Optional, specify page of results
      */
-    override suspend fun getItems(searchTerms: String?, page: Int): Weapons {
+    override suspend fun getItems(searchTerms: String?, page: Int): List<Weapon> {
         val responseString = super.getItemsJson(WEAPON, searchTerms, page)
-        return Gson().fromJson(responseString, Weapons::class.java)
+        val objects = Gson().fromJson(responseString, Weapons::class.java)
+
+        println(objects)
+        return objects.data // objects
     }
 
     /**

@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -24,63 +26,40 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
+import com.example.comp3717_wo_miniapp.data.Armour
+import com.example.comp3717_wo_miniapp.data.Incantation
+import com.example.comp3717_wo_miniapp.data.Item
 import com.example.comp3717_wo_miniapp.data.ItemData
-
-@Composable
-private fun <T: ItemData> ItemInfoReal(itemData: T) {
-    Column (
-        verticalArrangement = Arrangement.spacedBy(14.dp),
-        modifier = Modifier
-            .fillMaxHeight()
-            .padding(16.dp)
-    ) {
-        Text(
-            style = MaterialTheme.typography.titleLarge,
-            text = itemData.name
-        )
-        AsyncImage(
-            model = itemData.imageUrl,
-            contentDescription = "Item image",
-            modifier = Modifier
-                .width(124.dp)
-        )
-        Column (
-            modifier = Modifier
-                .clip(RoundedCornerShape(8.dp))
-                .border(1.dp, Color.LightGray, RoundedCornerShape(8.dp))
-                .padding(4.dp)
-        ) {
-            Box (
-                modifier = Modifier
-                    .clip(RoundedCornerShape(4.dp))
-                    .border(1.dp, Color.LightGray, RoundedCornerShape(4.dp))
-                    .padding(4.dp)
-            ) {
-                Text(
-                    style = MaterialTheme.typography.bodyLarge,
-                    text = itemData.description,
-                )
-            }
-        }
-    }
-}
+import com.example.comp3717_wo_miniapp.data.Shield
+import com.example.comp3717_wo_miniapp.data.Sorcery
+import com.example.comp3717_wo_miniapp.data.Talisman
+import com.example.comp3717_wo_miniapp.data.Weapon
 
 /**
  * Item specific information page.
  */
 @Composable
-fun <T : ItemData> ItemInfo (itemData: T, onCloseAction: () -> Unit) {
-    Box (
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        ItemInfoReal(itemData)
-        IconButton(
-            onCloseAction,
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-        ) {
-            Icon(Icons.Default.Clear, contentDescription = "Dismiss")
-        }
-    }
+fun ItemInfo (
+    itemData:           ItemData,
+    onDismissRequest:   () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismissRequest,
+        title = { Text(itemData.name) },
+        text = {
+            when (itemData) {
+                is Weapon -> WeaponInfo(weapon = itemData)
+                is Armour -> ArmourInfo(armour = itemData)
+                is Shield -> ShieldInfo(shield = itemData)
+                is Talisman -> BasicInfo(itemData = itemData)
+                is Sorcery -> SorceryInfo(sorcery = itemData)
+                is Incantation -> IncantationInfo(incantation = itemData)
+                is Item -> BasicInfo(itemData = itemData)
+                else -> Text("Details not available for this item type.")
+            }
+        },
+        confirmButton = {
+            Button(onClick = onDismissRequest) { Text("Close") }
+        },
+    )
 }

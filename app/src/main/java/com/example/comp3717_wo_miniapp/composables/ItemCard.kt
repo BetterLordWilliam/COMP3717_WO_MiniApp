@@ -29,43 +29,33 @@ import com.example.comp3717_wo_miniapp.data.ItemData
 import com.example.comp3717_wo_miniapp.states.ItemCardState
 
 @Composable
-private fun <T : ItemData> MinimisedItemCard(
-    item: ItemCardState<T>
+private fun CardActions(
+    onInfoButton: () -> Unit,
+    onSaveButton: () -> Unit,
 ) {
-    Row (
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(4.dp)
+    Column (
+        verticalArrangement = Arrangement.Top
     ) {
-        AsyncImage(
-            model = item.itemData.imageUrl,
-            contentDescription = "${item.itemData.name} image.",
-            modifier = Modifier
-                .fillMaxHeight()
-                .padding(4.dp)
-        )
-        Card (
-            colors = CardDefaults.cardColors(containerColor = Color(0xffdad3df)),
-            modifier = Modifier
-                .fillMaxSize()
+        IconButton(onClick = {
+            onInfoButton()
+        }, modifier = Modifier
+            .size(24.dp)
         ) {
-            LazyColumn {
-                item {
-                    Text(
-                        text = item.itemData.name,
-                        fontSize = 24.sp,
-                        modifier = Modifier
-                            .padding(8.dp)
-                    )
-                }
-            }
+            Icon(Icons.Default.Info, contentDescription="Item info page")
+        }
+        IconButton(onClick = {
+            onSaveButton()
+        }, modifier = Modifier
+            .size(24.dp)
+        ) {
+            Icon(Icons.Default.FavoriteBorder, contentDescription="Save item")
         }
     }
 }
 
 @Composable
-private fun <T : ItemData> MaximisedItemCard(
-    item: ItemCardState<T>,
+private fun <T : ItemData> MinimisedItemCard(
+    item: T
 ) {
     Row (
         modifier = Modifier
@@ -73,8 +63,8 @@ private fun <T : ItemData> MaximisedItemCard(
             .padding(4.dp)
     ) {
         AsyncImage(
-            model = item.itemData.imageUrl,
-            contentDescription = "${item.itemData.name} image.",
+            model = item.imageUrl,
+            contentDescription = "${item.name} image.",
             modifier = Modifier
                 .fillMaxHeight()
                 .padding(4.dp)
@@ -84,23 +74,54 @@ private fun <T : ItemData> MaximisedItemCard(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            LazyColumn {
-                item {
-                    Text(
-                        text = item.itemData.description,
-                        fontSize = 20.sp,
-                        modifier = Modifier
-                            .padding(8.dp)
-                    )
-                }
-            }
+            Text(
+                text = item.name,
+                fontSize = 24.sp,
+                modifier = Modifier
+                    .padding(8.dp)
+            )
         }
     }
 }
+
+//@Composable
+//private fun <T : ItemData> MaximisedItemCard(
+//    item: ItemCardState<T>,
+//) {
+//    Row (
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .padding(4.dp)
+//    ) {
+//        AsyncImage(
+//            model = item.itemData.imageUrl,
+//            contentDescription = "${item.itemData.name} image.",
+//            modifier = Modifier
+//                .fillMaxHeight()
+//                .padding(4.dp)
+//        )
+//        Card (
+//            colors = CardDefaults.cardColors(containerColor = Color(0xffdad3df)),
+//            modifier = Modifier
+//                .fillMaxSize()
+//        ) {
+//            LazyColumn {
+//                item {
+//                    Text(
+//                        text = item.itemData.description,
+//                        fontSize = 20.sp,
+//                        modifier = Modifier
+//                            .padding(8.dp)
+//                    )
+//                }
+//            }
+//        }
+//    }
+//}
 
 @Composable
 fun <T : ItemData> ItemCard(
-    item: ItemCardState<T>,
+    item: T,
     onInfoButton: () -> Unit,
     onSaveButton: () -> Unit
 ) {
@@ -108,32 +129,7 @@ fun <T : ItemData> ItemCard(
         modifier = Modifier
             .fillMaxWidth()
     ) {
-        Card (
-            onClick = { item.expanded = !item.expanded; println(item.expanded) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(if (item.expanded) 162.dp else 81.dp)
-        ) {
-            if (item.expanded) MaximisedItemCard(item) else MinimisedItemCard(item)
-        }
-
-        Column (
-            verticalArrangement = Arrangement.Top
-        ) {
-            IconButton(onClick = {
-                onInfoButton()
-            }, modifier = Modifier
-                .size(24.dp)
-            ) {
-                Icon(Icons.Default.Info, contentDescription="Item info page")
-            }
-            IconButton(onClick = {
-                onSaveButton()
-            }, modifier = Modifier
-                .size(24.dp)
-            ) {
-                Icon(Icons.Default.FavoriteBorder, contentDescription="Save item")
-            }
-        }
+        MinimisedItemCard(item)
+        CardActions(onInfoButton, onSaveButton)
     }
 }

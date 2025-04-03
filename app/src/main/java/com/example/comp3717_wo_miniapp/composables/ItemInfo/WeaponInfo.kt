@@ -40,37 +40,37 @@ import androidx.core.app.NotificationCompat.Style
 import coil3.compose.AsyncImage
 import com.example.comp3717_wo_miniapp.composables.ItemInfoComposables.NumericStatsGridSection
 import com.example.comp3717_wo_miniapp.composables.ItemInfoComposables.StringStatsGridSection
-import com.example.comp3717_wo_miniapp.data.ItemData
 import com.example.comp3717_wo_miniapp.data.NumericStatValue
 import com.example.comp3717_wo_miniapp.data.StringStatValue
 import com.example.comp3717_wo_miniapp.data.Weapon
 
 @Composable
-private fun ItemInfoReal(itemData: Weapon) {
+fun WeaponInfo(weapon: Weapon) {
     Column (
         verticalArrangement = Arrangement.spacedBy(14.dp),
         modifier = Modifier
             .fillMaxHeight()
             .padding(16.dp)
+            .verticalScroll(rememberScrollState(0))
     ) {
         Column {
             Text(
                 style = MaterialTheme.typography.titleLarge,
-                text = itemData.name
+                text = weapon.name
             )
             AsyncImage(
-                model = itemData.imageUrl,
+                model = weapon.imageUrl,
                 contentDescription = "Item image",
                 modifier = Modifier
                     .width(124.dp)
             )
-            Column (
+            Column(
                 modifier = Modifier
                     .clip(RoundedCornerShape(8.dp))
                     .border(1.dp, Color.LightGray, RoundedCornerShape(8.dp))
                     .padding(4.dp)
             ) {
-                Box (
+                Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(4.dp))
                         .border(1.dp, Color.LightGray, RoundedCornerShape(4.dp))
@@ -78,50 +78,29 @@ private fun ItemInfoReal(itemData: Weapon) {
                 ) {
                     Text(
                         style = MaterialTheme.typography.bodyLarge,
-                        text = itemData.description,
+                        text = weapon.description,
                     )
                 }
-                Row (
+                Row(
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     modifier = Modifier
                         .fillMaxWidth()
                 ) {
-                    Text("Category: ${itemData.category}")
-                    Text("Weight: ${itemData.weight}")
+                    Text("Category: ${weapon.category}")
+                    Text("Weight: ${weapon.weight}")
                 }
             }
         }
 
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            NumericStatsGridSection(title = "Attack", data = itemData.attack)
-            NumericStatsGridSection(title = "Defense", data = itemData.defence)
-        }
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            NumericStatsGridSection(title = "Requirements", data = itemData.reqAt)
-            StringStatsGridSection(title = "Scales With", data = itemData.scalesWith)
-        }
-    }
-}
-
-/**
- * Item specific information page.
- */
-@Composable
-fun WeaponInfo (itemData: Weapon, onCloseAction: () -> Unit) {
-    Box {
-        ItemInfoReal(itemData)
-        IconButton(
-            onCloseAction,
+        Column(
+            verticalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
-                .align(Alignment.TopEnd)
+                .fillMaxWidth()
         ) {
-            Icon(Icons.Default.Clear, contentDescription = "Dismiss")
+            NumericStatsGridSection(title = "Attack", data = weapon.attack)
+            NumericStatsGridSection(title = "Defense", data = weapon.defence)
+            NumericStatsGridSection(title = "Requirements", data = weapon.reqAt)
+            StringStatsGridSection(title = "Scales With", data = weapon.scalesWith)
         }
     }
 }

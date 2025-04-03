@@ -9,16 +9,16 @@ import io.ktor.client.HttpClient
 class IncantationRepository(
     override val eldenRingHttpClient: HttpClient
 
-) : EldenRingHttpRepository<Incantation>() {
+) : EldenRingHttpRepository() {
 
     /**
      * Retrieve incantations from JSON endpoint.
      * Optionally specify search terms
      * Optionally specify page
      */
-    override suspend fun getItems(searchTerms: String?, page: Int): Incantations {
+    override suspend fun getItems(searchTerms: String?, page: Int): List<Incantation> {
         val responseString = super.getItemsJson(INCANTATION, searchTerms, page)
-        return Gson().fromJson(responseString, Incantations::class.java)
+        return Gson().fromJson(responseString, Incantations::class.java).data
     }
 
     override suspend fun getItem(itemId: String): Incantation {

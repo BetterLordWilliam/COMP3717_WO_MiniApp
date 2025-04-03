@@ -29,7 +29,7 @@ import com.example.comp3717_wo_miniapp.data.Sorcery
 
 
 @Composable
-private fun ItemInfoReal(itemData: Incantation) {
+fun IncantationInfo(incantation: Incantation) {
     Column (
         verticalArrangement = Arrangement.spacedBy(14.dp),
         modifier = Modifier
@@ -39,10 +39,10 @@ private fun ItemInfoReal(itemData: Incantation) {
         Column {
             Text(
                 style = MaterialTheme.typography.titleLarge,
-                text = itemData.name
+                text = incantation.name
             )
             AsyncImage(
-                model = itemData.imageUrl,
+                model = incantation.imageUrl,
                 contentDescription = "Item image",
                 modifier = Modifier
                     .width(124.dp)
@@ -61,7 +61,7 @@ private fun ItemInfoReal(itemData: Incantation) {
                 ) {
                     Text(
                         style = MaterialTheme.typography.bodyLarge,
-                        text = itemData.description,
+                        text = incantation.description,
                     )
                 }
                 Box (
@@ -70,35 +70,18 @@ private fun ItemInfoReal(itemData: Incantation) {
                         .border(1.dp, Color.LightGray, RoundedCornerShape(4.dp))
                         .padding(4.dp)
                 ) {
-                    Text(text = itemData.effects, style = MaterialTheme.typography.bodyLarge)
+                    Text(text = incantation.effects, style = MaterialTheme.typography.bodyLarge)
                 }
                 Row (
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     modifier = Modifier
                         .fillMaxWidth()
                 ) {
-                    Text("Cost: ${itemData.cost}")
-                    Text("Slots: ${itemData.slots}")
+                    Text("Cost: ${incantation.cost}")
+                    Text("Slots: ${incantation.slots}")
                 }
             }
         }
-        NumericStatsGridSection(title = "Requirements", data = itemData.requires)
-    }
-}
-
-/**
- * Item specific information page.
- */
-@Composable
-fun IncantationInfo (itemData: Incantation, onCloseAction: () -> Unit) {
-    Box {
-        ItemInfoReal(itemData)
-        IconButton(
-            onCloseAction,
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-        ) {
-            Icon(Icons.Default.Clear, contentDescription = "Dismiss")
-        }
+        NumericStatsGridSection(title = "Requirements", data = incantation.requires)
     }
 }

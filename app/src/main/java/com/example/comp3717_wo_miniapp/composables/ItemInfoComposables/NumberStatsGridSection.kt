@@ -25,7 +25,6 @@ import com.example.comp3717_wo_miniapp.data.NumericStatValue
 fun NumericStatsGridSection(title: String, data: List<NumericStatValue?>) {
     Column(
         modifier = Modifier
-            .width(150.dp)
             .clip(RoundedCornerShape(8.dp))
             .border(1.dp, Color.LightGray, RoundedCornerShape(8.dp))
             .padding(12.dp)

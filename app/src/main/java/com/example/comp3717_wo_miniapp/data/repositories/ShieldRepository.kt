@@ -10,16 +10,16 @@ import io.ktor.client.HttpClient
 class ShieldRepository(
     override val eldenRingHttpClient: HttpClient
 
-) : EldenRingHttpRepository<Shield>() {
+) : EldenRingHttpRepository() {
 
     /**
      * fetch shield items from the API.
      * Optionally specify search terms
      * Optionally specify page of results
      */
-    override suspend fun getItems(searchTerms: String?, page: Int): Shields {
+    override suspend fun getItems(searchTerms: String?, page: Int): List<Shield> {
         val responseString = super.getItemsJson(SHIELD, searchTerms, page)
-        return Gson().fromJson(responseString, Shields::class.java)
+        return Gson().fromJson(responseString, Shields::class.java).data
     }
 
     override suspend fun getItem(itemId: String): Shield {

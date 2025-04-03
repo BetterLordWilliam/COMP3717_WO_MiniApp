@@ -18,29 +18,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.comp3717_wo_miniapp.states.EldenRingUIState
-
-@Composable
-private fun HomeOptionsDropDown(eldenRingUIState: EldenRingUIState? = null) {
-    var expanded by remember { mutableStateOf(false) }
-
-    Box {
-        IconButton(onClick = { expanded = !expanded }) {
-            Icon(Icons.Default.MoreVert, contentDescription = "More options")
-        }
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            eldenRingUIState?.itemStates?.map {
-                DropdownMenuItem(text = { Text(it.key.enumValue) }, onClick = {
-                    eldenRingUIState.selected.value = it.value
-                })
-            } ?: Text("No item types")
-        }
-    }
-}
+import com.example.comp3717_wo_miniapp.composables.ItemListComposables.ItemTypeSelector
+import com.example.comp3717_wo_miniapp.states.EldenRingViewModel
 
 /**
  * App home page composable
@@ -48,16 +29,13 @@ private fun HomeOptionsDropDown(eldenRingUIState: EldenRingUIState? = null) {
 @Composable
 fun Home(
     appNavController: NavController? = null,
-    eldenRingUIState: EldenRingUIState? = null,
+
 ) {
     Column (
         modifier = Modifier
             .padding(4.dp)
     ) {
-        Row {
-            Text(text="Elden Ring equipment quick reference.")
-            HomeOptionsDropDown(eldenRingUIState)
-        }
-        ItemList(eldenRingUIState?.selected?.value)
+        Text(text="Elden Ring equipment quick reference.")
+        ItemList()
     }
 }
