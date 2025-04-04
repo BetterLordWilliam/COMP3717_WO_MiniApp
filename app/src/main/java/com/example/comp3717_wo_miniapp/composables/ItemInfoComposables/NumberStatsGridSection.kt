@@ -19,10 +19,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.comp3717_wo_miniapp.data.NumericStatValue
+import com.example.comp3717_wo_miniapp.data.DoubleStat
+
 
 @Composable
-fun NumericStatsGridSection(title: String, data: List<NumericStatValue?>) {
+fun NumericStatsGridSection(title: String, data: List<DoubleStat>) {
     Column(
         modifier = Modifier
             .clip(RoundedCornerShape(8.dp))
@@ -37,9 +38,8 @@ fun NumericStatsGridSection(title: String, data: List<NumericStatValue?>) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                stat?.name?.let { Text(it, style = MaterialTheme.typography.bodySmall) }
-                Text(stat?.amount.toString(), style = MaterialTheme.typography.bodySmall)
-            }
+            Text(stat.name, style = MaterialTheme.typography.bodySmall) }
+            Text(stat.amount.toString(), style = MaterialTheme.typography.bodySmall)
         }
     }
 }

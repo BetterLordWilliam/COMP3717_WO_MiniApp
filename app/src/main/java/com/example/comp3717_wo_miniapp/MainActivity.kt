@@ -103,7 +103,7 @@ class MainActivity : ComponentActivity() {
 
     // Lazy declare EldenRing repositories
     private val erDb            by lazy { EldenRingDB.getDatabase(applicationContext) }
-    private val weaponRepo      by lazy { WeaponRepository(eldenRingHttpClient, erDb.weaponDao()) }
+    private val weaponRepo      by lazy { WeaponRepository(eldenRingHttpClient, erDb.statDao(), erDb.weaponDao()) }
     private val armourRepo      by lazy { ArmourRepository(eldenRingHttpClient) }
     private val shieldRepo      by lazy { ShieldRepository(eldenRingHttpClient) }
     private val sorceryRepo     by lazy { SorceryRepository(eldenRingHttpClient) }

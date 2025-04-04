@@ -40,8 +40,6 @@ import androidx.core.app.NotificationCompat.Style
 import coil3.compose.AsyncImage
 import com.example.comp3717_wo_miniapp.composables.ItemInfoComposables.NumericStatsGridSection
 import com.example.comp3717_wo_miniapp.composables.ItemInfoComposables.StringStatsGridSection
-import com.example.comp3717_wo_miniapp.data.NumericStatValue
-import com.example.comp3717_wo_miniapp.data.StringStatValue
 import com.example.comp3717_wo_miniapp.data.models.Weapon
 
 @Composable

@@ -29,7 +29,6 @@ import com.example.comp3717_wo_miniapp.composables.ItemInfoComposables.NumericSt
 import com.example.comp3717_wo_miniapp.composables.ItemInfoComposables.StringStatsGridSection
 import com.example.comp3717_wo_miniapp.data.models.Shield
 
-
 @Composable
 fun ShieldInfo(shield: Shield) {
     Column (

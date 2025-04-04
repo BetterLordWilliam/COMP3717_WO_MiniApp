@@ -5,7 +5,7 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.example.comp3717_wo_miniapp.data.ItemData
 import com.example.comp3717_wo_miniapp.data.ItemGroup
-import com.example.comp3717_wo_miniapp.data.NumericStatValue
+import com.example.comp3717_wo_miniapp.data.RequiredAttributeStatEntity
 import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "er_sorceries")
@@ -21,7 +21,7 @@ data class Sorcery(
     val slots:          Int,
     val effects:        String,
     @Ignore
-    val requires:       List<NumericStatValue>
+    val requires:       List<RequiredAttributeStatEntity>
 ) : ItemData
 
 data class Sorceries(

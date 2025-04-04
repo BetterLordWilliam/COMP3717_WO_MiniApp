@@ -127,6 +127,8 @@ class EldenRingViewModel (
                     else -> println("WOW bad")
                 }
 
+                println(weaponRepository.getItemsFromDatabase())
+
             } catch (exception: SQLiteConstraintException) {
                 println("Error inserting item into the database: ${exception}")
             }

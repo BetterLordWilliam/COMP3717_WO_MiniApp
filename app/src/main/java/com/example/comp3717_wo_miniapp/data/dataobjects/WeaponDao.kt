@@ -5,24 +5,24 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import com.example.comp3717_wo_miniapp.data.NumericStatValue
-import com.example.comp3717_wo_miniapp.data.StringStatValue
+import com.example.comp3717_wo_miniapp.data.ScalingStatsEntity
 import com.example.comp3717_wo_miniapp.data.models.Weapon
 import com.example.comp3717_wo_miniapp.data.models.WeaponEntity
+import com.example.comp3717_wo_miniapp.data.models.WeaponWithStats
 
 @Dao
 interface WeaponDao {
 
+//    @Query("SELECT * FROM er_weapons")
+//    suspend fun getItems(): List<WeaponEntity>
+
+    @Transaction
     @Query("SELECT * FROM er_weapons")
-    suspend fun getItems(): List<WeaponEntity>
+    suspend fun getItems(): List<WeaponWithStats>
 
-    @Transaction
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertNumericStatItems(stats: List<NumericStatValue>)
-
-    @Transaction
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertStringStatItems(stats: List<StringStatValue>)
+//    @Transaction
+//    @Insert(onConflict = OnConflictStrategy.REPLACE)
+//    suspend fun insertWeaponWithStats(weaponWithStats: WeaponWithStats)
 
     // @Transaction
     // @Query("SELECT * FROM er_weapons WHERE id = :weaponId")
@@ -30,5 +30,4 @@ interface WeaponDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertItem(weapon: WeaponEntity)
-
 }

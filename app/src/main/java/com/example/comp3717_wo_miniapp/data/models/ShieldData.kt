@@ -3,10 +3,12 @@ package com.example.comp3717_wo_miniapp.data.models
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import com.example.comp3717_wo_miniapp.data.AttackStatEntity
+import com.example.comp3717_wo_miniapp.data.DefenseStatEntity
 import com.example.comp3717_wo_miniapp.data.ItemData
 import com.example.comp3717_wo_miniapp.data.ItemGroup
-import com.example.comp3717_wo_miniapp.data.NumericStatValue
-import com.example.comp3717_wo_miniapp.data.StringStatValue
+import com.example.comp3717_wo_miniapp.data.RequiredAttributeStatEntity
+import com.example.comp3717_wo_miniapp.data.ScalingStatsEntity
 import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "er_shields")
@@ -19,15 +21,11 @@ data class Shield(
     override val description:   String,
     val category:               String,
     val weight:                 Double,
-    @Ignore
-    val attack:                 List<NumericStatValue>,
-    @Ignore
-    val defence:                List<NumericStatValue>,
-    @Ignore
+    val attack:                 List<AttackStatEntity>,
+    val defence:                List<DefenseStatEntity>,
     @SerializedName("requiredAttributes")
-    val reqAt:                  List<NumericStatValue>,
-    @Ignore
-    val scalesWith:             List<StringStatValue>
+    val reqAt:                  List<RequiredAttributeStatEntity>,
+    val scalesWith:             List<ScalingStatsEntity>
 ) : ItemData
 
 data class Shields(

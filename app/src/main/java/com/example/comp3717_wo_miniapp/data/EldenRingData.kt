@@ -1,15 +1,7 @@
 package com.example.comp3717_wo_miniapp.data
 
-import android.content.Context
-import androidx.room.Embedded
 import androidx.room.Entity
-import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import androidx.room.Relation
-import androidx.room.Room
-import com.google.gson.Gson
-import com.google.gson.annotations.Expose
-import com.google.gson.annotations.SerializedName
 
 // Room relationships
 // https://developer.android.com/training/data-storage/room/relationships/one-to-many
@@ -31,16 +23,60 @@ interface ItemGroup {
     val data:           List<ItemData>
 }
 
-@Entity(tableName = "er_number_stats", primaryKeys = ["id", "name", "amount"])
-data class NumericStatValue (
-    val id:             String,         // Same ID as the ItemData
-    val name:           String,
-    val amount:         Double
-)
+interface DoubleStat {
+    val name:       String
+    val amount:     Double
+}
 
-@Entity(tableName = "er_string_stats", primaryKeys = ["id", "name", "scaling"])
-data class StringStatValue (
-    val id:             String,         // Same ID as the ItemData
-    val name:           String,
-    val scaling:        String
-)
+interface StringStat {
+    val name:       String
+    val scaling: String
+}
+
+@Entity(tableName = "er_attack_stats", primaryKeys = ["id", "name", "amount"])
+data class AttackStatEntity (
+    val id:             String,
+    override val name:           String,
+    override val amount:         Double
+) : DoubleStat
+
+@Entity(tableName = "er_def_stats", primaryKeys = ["id", "name", "amount"])
+data class DefenseStatEntity (
+    val id:             String,
+    override val name:           String,
+    override val amount:         Double
+) : DoubleStat
+
+@Entity(tableName = "er_req_stats", primaryKeys = ["id", "name", "amount"])
+data class RequiredAttributeStatEntity (
+    val id:             String,
+    override val name:           String,
+    override val amount:         Double
+) : DoubleStat
+
+@Entity(tableName = "er_scaling_stats", primaryKeys = ["id", "name", "scaling"])
+data class ScalingStatsEntity (
+    val id:             String,
+    override val name:           String,
+    override val scaling:     String
+) : StringStat
+
+@Entity(tableName = "er_dmg_negation_stats", primaryKeys = ["id", "name", "amount"])
+data class DamageNegationStatsEntity(
+    val id:             String,
+    override val name:           String,
+    override val amount:         Double
+) : DoubleStat
+
+@Entity(tableName = "er_resistence_stats", primaryKeys = ["id", "name", "amount"])
+data class ResistenceStatsEntity(
+    val id:             String,
+    override val name:           String,
+    override val amount:         Double
+) : DoubleStat
+
+//fun DoubleStat.toPair(): Pair<String, Double> = Pair(name, amount)
+//fun List<DoubleStat>.toPairList(): List<Pair<String, Double>> = map { it.toPair() }
+//
+//fun StringStat.toPair(): Pair<String, String> = Pair(name, scalesWith)
+//fun List<StringStat>.toPairList(): List<Pair<String, String>> = map { it.toPair() }
