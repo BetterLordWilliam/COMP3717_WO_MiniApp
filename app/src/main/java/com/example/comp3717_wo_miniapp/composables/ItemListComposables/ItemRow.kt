@@ -22,8 +22,8 @@ import com.example.comp3717_wo_miniapp.data.ItemData
 @Composable
 fun ItemRow(
     itemData:       ItemData,
-    onInfoClicked:  () -> Unit,
-    onSaveClicked:  () -> Unit
+    onInfoClicked:  (ItemData) -> Unit,
+    onSaveClicked:  (ItemData) -> Unit
 ) {
     Row(
         modifier = Modifier.fillMaxWidth().padding(8.dp),
@@ -33,10 +33,10 @@ fun ItemRow(
         Spacer(modifier = Modifier.width(8.dp))
         Text(itemData.name, modifier = Modifier.weight(1f))
         Column {
-            IconButton(onClick = onInfoClicked) {
+            IconButton(onClick = { onInfoClicked(itemData) }) {
                 Icon(Icons.Default.Info, contentDescription = "Show item info")
             }
-            IconButton(onClick = onSaveClicked) {
+            IconButton(onClick = { onSaveClicked(itemData) }) {
                 Icon(Icons.Default.FavoriteBorder, contentDescription = "Save item to favorites")
             }
         }

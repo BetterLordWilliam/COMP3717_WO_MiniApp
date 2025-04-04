@@ -24,7 +24,7 @@ abstract class EldenRingHttpRepository {
     ) : String {
         val response = eldenRingHttpClient.get(NAME_SEARCH_PAG.format(endpointString, searchTerms, page))
         val json = response.body<JsonObject>().toString()
-        println(json)
+        // println(json)
         println(NAME_SEARCH_PAG.format(endpointString, searchTerms, page))
         return json
     }

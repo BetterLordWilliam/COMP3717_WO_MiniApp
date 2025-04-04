@@ -19,21 +19,15 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import coil3.compose.AsyncImage
-import com.example.comp3717_wo_miniapp.data.Armour
-import com.example.comp3717_wo_miniapp.data.Incantation
-import com.example.comp3717_wo_miniapp.data.Item
 import com.example.comp3717_wo_miniapp.data.ItemData
-import com.example.comp3717_wo_miniapp.data.Shield
-import com.example.comp3717_wo_miniapp.data.Sorcery
-import com.example.comp3717_wo_miniapp.data.Talisman
-import com.example.comp3717_wo_miniapp.data.Weapon
+import com.example.comp3717_wo_miniapp.data.models.Armour
+import com.example.comp3717_wo_miniapp.data.models.Incantation
+import com.example.comp3717_wo_miniapp.data.models.Item
+import com.example.comp3717_wo_miniapp.data.models.Shield
+import com.example.comp3717_wo_miniapp.data.models.Sorcery
+import com.example.comp3717_wo_miniapp.data.models.Talisman
+import com.example.comp3717_wo_miniapp.data.models.Weapon
+import com.example.comp3717_wo_miniapp.data.models.WeaponEntity
 
 /**
  * Item specific information page.

@@ -1,10 +1,14 @@
 package com.example.comp3717_wo_miniapp.states
 
+import android.database.sqlite.SQLiteConstraintException
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.example.comp3717_wo_miniapp.ItemType
 import com.example.comp3717_wo_miniapp.data.ItemData
+import com.example.comp3717_wo_miniapp.data.models.Weapon
+import com.example.comp3717_wo_miniapp.data.models.WeaponEntity
 import com.example.comp3717_wo_miniapp.data.repositories.ArmourRepository
 import com.example.comp3717_wo_miniapp.data.repositories.IncantationRepository
 import com.example.comp3717_wo_miniapp.data.repositories.ItemsRepository
@@ -78,20 +82,19 @@ class EldenRingViewModel (
      *
      * @param itemType {ItemType} the type of item
      */
-    fun setItemType(itemType: ItemType) {
-        if (itemType == _selectedItemType.value)
-            return
-
-        _selectedItemType.value = itemType
-        _searchPage.value = 0
-        searchString.value = ""
+    val setItemType: (ItemType) -> Unit = { itemType ->
+        if (itemType != _selectedItemType.value) {
+            _selectedItemType.value = itemType
+            _searchPage.value = 0
+            searchString.value = ""
+        }
     }
 
-    fun incrementPage() {
+    val incrementPage: () -> Unit = {
         _searchPage.value += 1
     }
 
-    fun decrementPage() {
+    val decrementPage: () -> Unit = {
         _searchPage.value -= if (_searchPage.value > 0) 1 else 0
     }
 
@@ -100,19 +103,34 @@ class EldenRingViewModel (
      *
      * @param infoItem {ItemData} the type of the items data
      */
-    fun showInfoItem(infoItem: ItemData) {
+    val showInfoItem: (ItemData) -> Unit = { infoItem ->
         _infoItem.value = infoItem
     }
 
     /**
      * Dismisses a popup information dialog for the item information.
      */
-    fun dismissInfoItem() {
+    val dismissInfoItem: () -> Unit = {
         _infoItem.value = null
     }
 
-    fun saveItem(infoItem: ItemData) {
+    /**
+     * Saves the item into the room database.
+     */
+    val saveItem: (ItemData) -> Unit = { infoItem ->
         println("Saving ${infoItem} ... (not really)")
+
+        viewModelScope.launch {
+            try {
+                when (_selectedItemType.value) {
+                    ItemType.WEAPON -> weaponRepository.saveItemToDatabase(infoItem as Weapon)
+                    else -> println("WOW bad")
+                }
+
+            } catch (exception: SQLiteConstraintException) {
+                println("Error inserting item into the database: ${exception}")
+            }
+        }
     }
 
     /**

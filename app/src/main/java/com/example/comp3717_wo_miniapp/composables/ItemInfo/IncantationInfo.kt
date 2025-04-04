@@ -24,8 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.example.comp3717_wo_miniapp.composables.ItemInfoComposables.NumericStatsGridSection
-import com.example.comp3717_wo_miniapp.data.Incantation
-import com.example.comp3717_wo_miniapp.data.Sorcery
+import com.example.comp3717_wo_miniapp.data.models.Incantation
 
 
 @Composable

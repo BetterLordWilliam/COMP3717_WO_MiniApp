@@ -1,8 +1,8 @@
 package com.example.comp3717_wo_miniapp.data.repositories
 
 import com.example.comp3717_wo_miniapp.data.TALISMAN
-import com.example.comp3717_wo_miniapp.data.Talisman
-import com.example.comp3717_wo_miniapp.data.Talismans
+import com.example.comp3717_wo_miniapp.data.models.Talisman
+import com.example.comp3717_wo_miniapp.data.models.Talismans
 import com.google.gson.Gson
 import io.ktor.client.HttpClient
 

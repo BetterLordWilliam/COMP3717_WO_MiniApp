@@ -2,8 +2,8 @@ package com.example.comp3717_wo_miniapp.data.repositories
 
 import com.example.comp3717_wo_miniapp.data.ITEM
 import com.example.comp3717_wo_miniapp.data.SHIELD
-import com.example.comp3717_wo_miniapp.data.Shield
-import com.example.comp3717_wo_miniapp.data.Shields
+import com.example.comp3717_wo_miniapp.data.models.Shield
+import com.example.comp3717_wo_miniapp.data.models.Shields
 import com.google.gson.Gson
 import io.ktor.client.HttpClient
 

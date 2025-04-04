@@ -15,12 +15,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.comp3717_wo_miniapp.states.EldenRingViewModel
 
 @Composable
 fun ItemListNavigator() {
-    val eldenRingViewModel: EldenRingViewModel = viewModel()
+    val activityOwner = LocalContext.current as ViewModelStoreOwner
+    val eldenRingViewModel: EldenRingViewModel = viewModel(viewModelStoreOwner = activityOwner)
 
     Row (
         horizontalArrangement = Arrangement.Center,

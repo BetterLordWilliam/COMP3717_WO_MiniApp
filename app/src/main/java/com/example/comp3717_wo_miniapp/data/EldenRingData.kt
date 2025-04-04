@@ -1,9 +1,24 @@
 package com.example.comp3717_wo_miniapp.data
 
+import android.content.Context
+import androidx.room.Embedded
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import androidx.room.Relation
+import androidx.room.Room
 import com.google.gson.Gson
+import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+
+// Room relationships
+// https://developer.android.com/training/data-storage/room/relationships/one-to-many
+
+// Some useful information about ignoring certain fields in Room dataclass
+// https://stackoverflow.com/questions/67270176/how-to-make-room-ignore-a-field-in-the-data-model
+
+// Some useful information about ignoring certain fields in Gson data class
+// https://www.javadoc.io/doc/com.google.code.gson/gson/latest/com.google.gson/com/google/gson/annotations/Expose.html
 
 interface ItemData {
     val id:             String
@@ -16,143 +31,16 @@ interface ItemGroup {
     val data:           List<ItemData>
 }
 
-@Entity(tableName = "er_number_stats")
+@Entity(tableName = "er_number_stats", primaryKeys = ["id", "name", "amount"])
 data class NumericStatValue (
+    val id:             String,         // Same ID as the ItemData
     val name:           String,
     val amount:         Double
 )
 
-@Entity(tableName = "er_string_stats")
+@Entity(tableName = "er_string_stats", primaryKeys = ["id", "name", "scaling"])
 data class StringStatValue (
+    val id:             String,         // Same ID as the ItemData
     val name:           String,
     val scaling:        String
 )
-
-@Entity(tableName = "er_items")
-data class Item (
-    @PrimaryKey
-    override val id:            String,
-    override val name:          String,
-    @SerializedName("image")
-    override val imageUrl:      String,
-    override val description:   String,
-    val type:                   String,
-    val effect:                 String
-) : ItemData
-
-@Entity(tableName = "er_weapons")
-data class Weapon (
-    @PrimaryKey
-    override val id:            String,
-    override val name:          String,
-    @SerializedName("image")
-    override val imageUrl:      String,
-    override val description:   String,
-    val category:               String,
-    val weight:                 Double,
-    val attack:                 List<NumericStatValue>,
-    val defence:                List<NumericStatValue>,
-    @SerializedName("requiredAttributes")
-    val reqAt:                  List<NumericStatValue>,
-    val scalesWith:             List<StringStatValue>
-) : ItemData
-
-@Entity(tableName = "er_armours")
-data class Armour(
-    @PrimaryKey
-    override val id:            String,
-    override val name:          String,
-    @SerializedName("image")
-    override val imageUrl:      String,
-    override val description:   String,
-    val category:               String,
-    val weight:                 Double,
-    val dmgNegation:            List<NumericStatValue>,
-    val resistance:             List<NumericStatValue>
-) : ItemData
-
-@Entity(tableName = "er_shields")
-data class Shield(
-    @PrimaryKey
-    override val id:            String,
-    override val name:          String,
-    @SerializedName("image")
-    override val imageUrl:      String,
-    override val description:   String,
-    val category:               String,
-    val weight:                 Double,
-    val attack:                 List<NumericStatValue>,
-    val defence:                List<NumericStatValue>,
-    @SerializedName("requiredAttributes")
-    val reqAt:                  List<NumericStatValue>,
-    val scalesWith:             List<StringStatValue>
-) : ItemData
-
-@Entity(tableName = "er_talismans")
-data class Talisman(
-    @PrimaryKey
-    override val id:             String,
-    override val name:           String,
-    @SerializedName("image")
-    override val imageUrl:       String,
-    override val description:    String,
-    val effects:        String
-) : ItemData
-
-@Entity(tableName = "er_sorceries")
-data class Sorcery(
-    @PrimaryKey
-    override val id:             String,
-    override val name:           String,
-    @SerializedName("image")
-    override val imageUrl:       String,
-    override val description:    String,
-    val type:           String,
-    val cost:           Int,
-    val slots:          Int,
-    val effects:        String,
-    val requires:       List<NumericStatValue>
-) : ItemData
-
-@Entity(tableName = "er_incantations")
-data class Incantation(
-    @PrimaryKey
-    override val id:             String,
-    override val name:           String,
-    @SerializedName("image")
-    override val imageUrl:       String,
-    override val description:    String,
-    val type:           String,
-    val cost:           Int,
-    val slots:          Int,
-    val effects:        String,
-    val requires:       List<NumericStatValue>
-) : ItemData
-
-data class Weapons(
-    override val data: List<Weapon>
-) : ItemGroup
-
-data class Armours(
-    override val data: List<Armour>
-) : ItemGroup
-
-data class Shields(
-    override val data: List<Shield>
-) : ItemGroup
-
-data class Sorceries(
-    override val data: List<Sorcery>
-) : ItemGroup
-
-data class Incantations(
-    override val data: List<Incantation>
-) : ItemGroup
-
-data class Talismans(
-    override val data : List<Talisman>
-) : ItemGroup
-
-data class Items(
-    override val data: List<Item>
-) : ItemGroup

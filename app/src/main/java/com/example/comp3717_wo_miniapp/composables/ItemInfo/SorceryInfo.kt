@@ -27,8 +27,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.example.comp3717_wo_miniapp.composables.ItemInfoComposables.NumericStatsGridSection
 import com.example.comp3717_wo_miniapp.composables.ItemInfoComposables.StringStatsGridSection
-import com.example.comp3717_wo_miniapp.data.Sorcery
-import com.example.comp3717_wo_miniapp.data.Weapon
+import com.example.comp3717_wo_miniapp.data.models.Sorcery
 
 @Composable
 fun SorceryInfo(sorcery: Sorcery) {

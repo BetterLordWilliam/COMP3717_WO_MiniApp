@@ -1,8 +1,8 @@
 package com.example.comp3717_wo_miniapp.data.repositories
 
 import com.example.comp3717_wo_miniapp.data.ITEM
-import com.example.comp3717_wo_miniapp.data.Item
-import com.example.comp3717_wo_miniapp.data.Items
+import com.example.comp3717_wo_miniapp.data.models.Item
+import com.example.comp3717_wo_miniapp.data.models.Items
 import com.google.gson.Gson
 import io.ktor.client.HttpClient
 

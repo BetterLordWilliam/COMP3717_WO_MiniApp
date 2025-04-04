@@ -29,7 +29,6 @@ import com.example.comp3717_wo_miniapp.states.EldenRingViewModel
 @Composable
 fun Home(
     appNavController: NavController? = null,
-
 ) {
     Column (
         modifier = Modifier

@@ -27,8 +27,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.example.comp3717_wo_miniapp.composables.ItemInfoComposables.NumericStatsGridSection
 import com.example.comp3717_wo_miniapp.composables.ItemInfoComposables.StringStatsGridSection
-import com.example.comp3717_wo_miniapp.data.Armour
-import com.example.comp3717_wo_miniapp.data.Weapon
+import com.example.comp3717_wo_miniapp.data.models.Armour
 
 @Composable
 fun ArmourInfo(armour: Armour) {

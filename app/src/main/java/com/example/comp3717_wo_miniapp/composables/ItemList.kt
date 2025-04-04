@@ -33,8 +33,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.comp3717_wo_miniapp.composables.ItemInfo.ItemInfo
@@ -52,8 +54,9 @@ import com.example.comp3717_wo_miniapp.states.EldenRingViewModel
  */
 @Composable
 fun ItemList() {
+    val activityOwner = LocalContext.current as ViewModelStoreOwner
+    val eldenRingViewModel: EldenRingViewModel = viewModel(viewModelStoreOwner = activityOwner)
 
-    val eldenRingViewModel: EldenRingViewModel = viewModel()
     val selectedItemType    by eldenRingViewModel.selectedItemType.collectAsStateWithLifecycle()
     val isLoading           by eldenRingViewModel.isLoading.collectAsStateWithLifecycle()
     val error               by eldenRingViewModel.error.collectAsStateWithLifecycle()
@@ -63,7 +66,7 @@ fun ItemList() {
     Column(modifier = Modifier.fillMaxSize()) {
         ItemTypeSelector(
             selectedItemType = selectedItemType,
-            onItemTypeSelected = { eldenRingViewModel.setItemType(it) }
+            onItemTypeSelected = eldenRingViewModel.setItemType
         )
         when {
             isLoading -> {
@@ -83,8 +86,8 @@ fun ItemList() {
                         items(items, key = { it.id }) { itemData ->
                             ItemRow(
                                 itemData = itemData,
-                                onInfoClicked = { eldenRingViewModel.showInfoItem(itemData) },
-                                onSaveClicked = { eldenRingViewModel.saveItem(itemData) }
+                                onInfoClicked = eldenRingViewModel.showInfoItem,
+                                onSaveClicked = eldenRingViewModel.saveItem
                             )
                             HorizontalDivider()
                         }
@@ -95,7 +98,7 @@ fun ItemList() {
         infoItem?.let { itemToShowInfo ->
             ItemInfo(
                 itemData = itemToShowInfo,
-                onDismissRequest = { eldenRingViewModel.dismissInfoItem() }
+                onDismissRequest = eldenRingViewModel.dismissInfoItem
             )
         }
     }
