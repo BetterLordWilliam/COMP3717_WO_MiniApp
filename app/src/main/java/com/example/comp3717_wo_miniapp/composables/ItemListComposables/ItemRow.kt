@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -19,11 +18,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.example.comp3717_wo_miniapp.data.ItemData
+import com.example.comp3717_wo_miniapp.data.entites.ItemData
 
 @Composable
 fun ItemRow(
-    itemData:       ItemData,
+    itemData: ItemData,
     onButtonOneClicked:  (ItemData) -> Unit,
     onButtonTwoClicked:  (ItemData) -> Unit,
     iconButtonOne: ImageVector = Icons.Default.Info,

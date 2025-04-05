@@ -3,9 +3,9 @@ package com.example.comp3717_wo_miniapp.data.models
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import com.example.comp3717_wo_miniapp.data.ItemData
-import com.example.comp3717_wo_miniapp.data.ItemGroup
-import com.example.comp3717_wo_miniapp.data.RequiredAttributeStatEntity
+import com.example.comp3717_wo_miniapp.data.entites.ItemData
+import com.example.comp3717_wo_miniapp.data.entites.ItemGroup
+import com.example.comp3717_wo_miniapp.data.entites.RequiredAttributeStatEntity
 import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "er_sorceries")

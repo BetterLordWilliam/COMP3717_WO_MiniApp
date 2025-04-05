@@ -2,13 +2,11 @@ package com.example.comp3717_wo_miniapp.states
 
 import android.database.sqlite.SQLiteConstraintException
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.example.comp3717_wo_miniapp.ItemType
-import com.example.comp3717_wo_miniapp.data.ItemData
+import com.example.comp3717_wo_miniapp.data.entites.ItemData
+import com.example.comp3717_wo_miniapp.data.models.Armour
 import com.example.comp3717_wo_miniapp.data.models.Weapon
-import com.example.comp3717_wo_miniapp.data.models.WeaponEntity
 import com.example.comp3717_wo_miniapp.data.repositories.ArmourRepository
 import com.example.comp3717_wo_miniapp.data.repositories.IncantationRepository
 import com.example.comp3717_wo_miniapp.data.repositories.ItemsRepository
@@ -20,7 +18,7 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
@@ -30,6 +28,7 @@ import kotlinx.coroutines.launch
  *
  * Application view model.
  */
+@OptIn(FlowPreview::class)
 class EldenRingViewModel (
 
     private val weaponRepository:       WeaponRepository,
@@ -63,18 +62,25 @@ class EldenRingViewModel (
     private val _searchPage = MutableStateFlow<Int>(0)
     val searchPage: StateFlow<Int> = _searchPage.asStateFlow()
 
-//    private val _searchString = MutableStateFlow("")
-//    val searchString: StateFlow<String> = _searchString.asStateFlow()
-
-    val searchString    = MutableStateFlow("")
+    private val _searchString = MutableStateFlow("")
+    val searchString: StateFlow<String> = _searchString.asStateFlow()
 
     /**
      * Load weapon items from the database by default.
      */
     init {
-        itemPageSubscribe()
-        itemTypeSubscribe()
-        searchByTermsSubscribe()
+        viewModelScope.launch {
+            combine(
+                _searchString.debounce(1000L),
+                _searchPage,
+                _selectedItemType
+            ) { search, page, itemType ->
+                Triple(itemType, search, page)
+            }
+            .collectLatest { (item: ItemType, search: String, page: Int) ->
+                loadItemsForType(item, search, page)
+            }
+        }
     }
 
     /**
@@ -86,7 +92,7 @@ class EldenRingViewModel (
         if (itemType != _selectedItemType.value) {
             _selectedItemType.value = itemType
             _searchPage.value = 0
-            searchString.value = ""
+            _searchString.value = ""
         }
     }
 
@@ -96,6 +102,10 @@ class EldenRingViewModel (
 
     val decrementPage: () -> Unit = {
         _searchPage.value -= if (_searchPage.value > 0) 1 else 0
+    }
+
+    val updatedSearchString:  (String) -> Unit = { newTerms ->
+        _searchString.value = newTerms
     }
 
     /**
@@ -124,6 +134,7 @@ class EldenRingViewModel (
             try {
                 when (_selectedItemType.value) {
                     ItemType.WEAPON -> weaponRepository.saveItemToDatabase(infoItem as Weapon)
+                    ItemType.ARMOUR -> armourRepository.saveItemToDatabase(infoItem as Armour)
                     else -> println("WOW bad")
                 }
 
@@ -136,51 +147,13 @@ class EldenRingViewModel (
     }
 
     /**
-     * call search when the item type is changed.
-     */
-    private fun itemTypeSubscribe() {
-        viewModelScope.launch {
-            selectedItemType
-                .collect {
-                    loadItemsForType()
-                }
-        }
-    }
-
-    /**
-     * call search when the item page is changed.
-     */
-    private fun itemPageSubscribe() {
-        viewModelScope.launch {
-            searchPage
-                .collect {
-                    loadItemsForType()
-                }
-        }
-    }
-
-    /**
-     * call search with the current collected value from the search string flow.
-     */
-    @OptIn(FlowPreview::class)
-    private fun searchByTermsSubscribe() {
-        viewModelScope.launch {
-            searchString
-                .debounce(1000L)
-                .collect {
-                    loadItemsForType()
-                }
-        }
-    }
-
-    /**
      * Uses the ItemType enum to query specific API endpoint for item information.
      *
      * @param itemType {ItemType} the type of item to query API for
      */
     fun loadItemsForType(
         itemType: ItemType  = _selectedItemType.value,
-        searchTerms: String = searchString.value,
+        searchTerms: String = _searchString.value,
         page: Int           = _searchPage.value
     ) {
         viewModelScope.launch {

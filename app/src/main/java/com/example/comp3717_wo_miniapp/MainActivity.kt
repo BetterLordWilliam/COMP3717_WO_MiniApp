@@ -31,7 +31,7 @@ import com.example.comp3717_wo_miniapp.data.EldenRingDB
 import com.example.comp3717_wo_miniapp.data.EldenRingDatabase
 import com.example.comp3717_wo_miniapp.data.eldenRingHttpClient
 import com.example.comp3717_wo_miniapp.data.repositories.ArmourRepository
-import com.example.comp3717_wo_miniapp.data.repositories.EldenRingHttpRepository
+import com.example.comp3717_wo_miniapp.data.repositories.EldenRingItemRepository
 import com.example.comp3717_wo_miniapp.data.repositories.IncantationRepository
 import com.example.comp3717_wo_miniapp.data.repositories.ItemsRepository
 import com.example.comp3717_wo_miniapp.data.repositories.ShieldRepository
@@ -106,7 +106,7 @@ class MainActivity : ComponentActivity() {
     // Lazy declare EldenRing repositories
     private val erDb            by lazy { EldenRingDB.getDatabase(applicationContext) }
     private val weaponRepo      by lazy { WeaponRepository(eldenRingHttpClient, erDb.statDao(), erDb.weaponDao()) }
-    private val armourRepo      by lazy { ArmourRepository(eldenRingHttpClient) }
+    private val armourRepo      by lazy { ArmourRepository(eldenRingHttpClient, erDb.statDao(), erDb.armourDao()) }
     private val shieldRepo      by lazy { ShieldRepository(eldenRingHttpClient) }
     private val sorceryRepo     by lazy { SorceryRepository(eldenRingHttpClient) }
     private val incantationRepo by lazy { IncantationRepository(eldenRingHttpClient) }

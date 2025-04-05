@@ -95,10 +95,10 @@ fun WeaponInfo(weapon: Weapon) {
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            NumericStatsGridSection(title = "Attack", data = weapon.attack)
-            NumericStatsGridSection(title = "Defense", data = weapon.defence)
-            NumericStatsGridSection(title = "Requirements", data = weapon.reqAt)
-            StringStatsGridSection(title = "Scales With", data = weapon.scalesWith)
+            weapon.attack?.let { NumericStatsGridSection(title = "Attack", data = weapon.attack) }
+            weapon.defence?.let { NumericStatsGridSection(title = "Defense", data = weapon.defence) }
+            weapon.reqAt?.let { NumericStatsGridSection(title = "Requirements", data = weapon.reqAt) }
+            weapon.scalesWith?.let { StringStatsGridSection(title = "Scales With", data = weapon.scalesWith) }
         }
     }
 }

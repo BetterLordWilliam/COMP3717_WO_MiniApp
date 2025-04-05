@@ -62,7 +62,8 @@ fun ItemList() {
                         eldenRingViewModel.searchString,
                         eldenRingViewModel.searchPage,
                         eldenRingViewModel.incrementPage,
-                        eldenRingViewModel.decrementPage
+                        eldenRingViewModel.decrementPage,
+                        eldenRingViewModel.updatedSearchString
                     )
                     LazyColumn(modifier = Modifier.weight(1f)) {
                         items(items, key = { it.id }) { itemData ->

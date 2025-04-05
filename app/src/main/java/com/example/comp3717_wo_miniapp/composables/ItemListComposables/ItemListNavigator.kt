@@ -20,10 +20,11 @@ import kotlinx.coroutines.flow.StateFlow
 @Composable
 fun ItemListNavigator(
 
-    searchField: MutableStateFlow<String>,
+    searchField: StateFlow<String>,
     searchPage: StateFlow<Int>,
     navigatorForward: () -> Unit,
-    navigatorBackward: () -> Unit
+    navigatorBackward: () -> Unit,
+    searchStringUpdated: (String) -> Unit
 
 ) {
     Row (
@@ -34,7 +35,7 @@ fun ItemListNavigator(
     ) {
         TextField(
             value = searchField.collectAsState().value,
-            onValueChange = { searchField.value = it; }
+            onValueChange = searchStringUpdated
         )
         IconButton(navigatorBackward) {
             Icon(Icons.Default.KeyboardArrowLeft, contentDescription = "Previous Page")

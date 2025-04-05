@@ -5,11 +5,12 @@ import com.example.comp3717_wo_miniapp.data.models.Sorceries
 import com.example.comp3717_wo_miniapp.data.models.Sorcery
 import com.google.gson.Gson
 import io.ktor.client.HttpClient
+import kotlinx.coroutines.flow.Flow
 
 class SorceryRepository(
     override val eldenRingHttpClient: HttpClient
 
-) : EldenRingHttpRepository() {
+) : EldenRingItemRepository<Sorcery>() {
 
     /**
      * Retrieve sorceries from the elden ring HTTP endpoint.
@@ -21,7 +22,15 @@ class SorceryRepository(
         return Gson().fromJson(responseString, Sorceries::class.java).data
     }
 
-    override suspend fun getItem(itemId: String): Sorcery {
+    override fun getItemsFromDatabase(searchString: String?, page: Int): Flow<List<Sorcery>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun removeItemFromDatabase(item: Sorcery) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun saveItemToDatabase(item: Sorcery) {
         TODO("Not yet implemented")
     }
 }

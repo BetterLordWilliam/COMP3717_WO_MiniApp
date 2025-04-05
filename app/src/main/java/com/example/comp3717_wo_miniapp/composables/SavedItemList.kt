@@ -65,7 +65,8 @@ fun SavedItemList() {
                         eldenRingSavedViewModel.searchString,
                         eldenRingSavedViewModel.searchPage,
                         eldenRingSavedViewModel.incrementPage,
-                        eldenRingSavedViewModel.decrementPage
+                        eldenRingSavedViewModel.decrementPage,
+                        eldenRingSavedViewModel.updatedSearchString
                     )
                     LazyColumn(modifier = Modifier.weight(1f)) {
                         items(items, key = { it.id }) { itemData ->

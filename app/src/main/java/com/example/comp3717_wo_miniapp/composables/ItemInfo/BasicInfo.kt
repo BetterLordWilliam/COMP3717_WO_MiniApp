@@ -16,7 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.example.comp3717_wo_miniapp.data.ItemData
+import com.example.comp3717_wo_miniapp.data.entites.ItemData
 
 @Composable
 fun BasicInfo(itemData: ItemData) {

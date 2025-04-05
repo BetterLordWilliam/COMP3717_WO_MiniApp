@@ -2,15 +2,15 @@ package com.example.comp3717_wo_miniapp.data.models
 
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import com.example.comp3717_wo_miniapp.data.DamageNegationStatsEntity
-import com.example.comp3717_wo_miniapp.data.ItemData
-import com.example.comp3717_wo_miniapp.data.ItemGroup
-import com.example.comp3717_wo_miniapp.data.ResistenceStatsEntity
+import com.example.comp3717_wo_miniapp.data.entites.ArmourEntity
+import com.example.comp3717_wo_miniapp.data.entites.ArmourWithStats
+import com.example.comp3717_wo_miniapp.data.entites.DamageNegationStatsEntity
+import com.example.comp3717_wo_miniapp.data.entites.ItemData
+import com.example.comp3717_wo_miniapp.data.entites.ItemGroup
+import com.example.comp3717_wo_miniapp.data.entites.ResistenceStatsEntity
 import com.google.gson.annotations.SerializedName
 
-
 data class Armour(
-    @PrimaryKey
     override val id:            String,
     override val name:          String,
     @SerializedName("image")
@@ -18,13 +18,34 @@ data class Armour(
     override val description:   String,
     val category:               String,
     val weight:                 Double,
-    @Ignore
-    val dmgNegation:            List<DamageNegationStatsEntity>,
-    @Ignore
-    val resistance:             List<ResistenceStatsEntity>
+    val dmgNegation:            List<DamageNegationStatsEntity>?,
+    val resistance:             List<ResistenceStatsEntity>?
 ) : ItemData
 
 data class Armours(
     override val data: List<Armour>
 ) : ItemGroup
 
+fun Armour.toArmourEntity(): ArmourEntity {
+    return ArmourEntity(
+        id = id,
+        name = name,
+        imageUrl = imageUrl,
+        description = description,
+        category = category,
+        weight = weight
+    )
+}
+
+fun Armour.toArmourWithStatsEntity(): ArmourWithStats {
+    val armourEntity = toArmourEntity()
+
+    dmgNegation?.forEach { it.parentId = id }
+    resistance?.forEach { it.parentId = id }
+
+    return ArmourWithStats(
+        armour = armourEntity,
+        dmgNegation = dmgNegation,
+        resistance = resistance
+    )
+}

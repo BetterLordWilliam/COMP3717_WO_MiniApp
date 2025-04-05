@@ -1,10 +1,12 @@
 package com.example.comp3717_wo_miniapp.states
 
 import android.database.sqlite.SQLiteConstraintException
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.comp3717_wo_miniapp.ItemType
-import com.example.comp3717_wo_miniapp.data.ItemData
+import com.example.comp3717_wo_miniapp.data.entites.ItemData
+import com.example.comp3717_wo_miniapp.data.models.Armour
 import com.example.comp3717_wo_miniapp.data.models.Weapon
 import com.example.comp3717_wo_miniapp.data.repositories.ArmourRepository
 import com.example.comp3717_wo_miniapp.data.repositories.IncantationRepository
@@ -14,10 +16,15 @@ import com.example.comp3717_wo_miniapp.data.repositories.SorceryRepository
 import com.example.comp3717_wo_miniapp.data.repositories.TalismanRepository
 import com.example.comp3717_wo_miniapp.data.repositories.WeaponRepository
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 
 class EldenRingSavedViewModel(
@@ -50,18 +57,29 @@ class EldenRingSavedViewModel(
     private val _searchPage = MutableStateFlow<Int>(0)
     val searchPage: StateFlow<Int> = _searchPage.asStateFlow()
 
-//    private val _searchString = MutableStateFlow("")
-//    val searchString: StateFlow<String> = _searchString.asStateFlow()
-
-    val searchString    = MutableStateFlow("")
+    private val _searchString = MutableStateFlow<String>("")
+    val searchString: StateFlow<String> = _searchString.asStateFlow()
 
     /**
      * Load weapon items from the database by default.
      */
     init {
-        itemPageSubscribe()
-        loadItemsForTypeDB()
-        searchByTermsSubscribe()
+        viewModelScope.launch {
+            combine(
+                _searchString.debounce(1000L),
+                _searchPage,
+                _selectedItemType
+            ) { itemString, itemPage, itemType ->
+                Triple(itemType, itemString, itemPage)
+            }.collectLatest { (itemType, itemString, itemPage) ->
+                _isLoading.value = true
+                loadItemsForTypeDB(itemType, itemString, itemPage)
+                    .also{ _isLoading.value = false }
+                    .collectLatest { fetchedItems ->
+                        _items.value = fetchedItems as List<ItemData>
+                    }
+            }
+        }
     }
 
     /**
@@ -73,7 +91,7 @@ class EldenRingSavedViewModel(
         if (itemType != _selectedItemType.value) {
             _selectedItemType.value = itemType
             _searchPage.value = 0
-            searchString.value = ""
+            _searchString.value = ""
         }
     }
 
@@ -83,6 +101,10 @@ class EldenRingSavedViewModel(
 
     val decrementPage: () -> Unit = {
         _searchPage.value -= if (_searchPage.value > 0) 1 else 0
+    }
+
+    val updatedSearchString: (String) -> Unit = { newTerms ->
+        _searchString.value = newTerms
     }
 
     /**
@@ -102,32 +124,6 @@ class EldenRingSavedViewModel(
     }
 
     /**
-     * call search with the current collected value from the search string flow.
-     */
-    @OptIn(FlowPreview::class)
-    private fun searchByTermsSubscribe() {
-        viewModelScope.launch {
-            searchString
-                .debounce(1000L)
-                .collect {
-                    loadItemsForTypeDB()
-                }
-        }
-    }
-
-    /**
-     * call search with the page.
-     */
-    private fun itemPageSubscribe() {
-        viewModelScope.launch {
-            searchPage
-                .collect {
-                    loadItemsForTypeDB()
-                }
-        }
-    }
-
-    /**
      * Saves the item into the room database.
      */
     val deleteItem: (ItemData) -> Unit = { infoItem ->
@@ -136,7 +132,8 @@ class EldenRingSavedViewModel(
         viewModelScope.launch {
             try {
                 when (_selectedItemType.value) {
-                    ItemType.WEAPON -> weaponRepository.removeFromDatabase(infoItem as Weapon)
+                    ItemType.WEAPON -> weaponRepository.removeItemFromDatabase(infoItem as Weapon)
+                    ItemType.ARMOUR -> armourRepository.removeItemFromDatabase(infoItem as Armour)
                     else -> println("WOW bad")
                 }
                 loadItemsForTypeDB()
@@ -147,32 +144,25 @@ class EldenRingSavedViewModel(
         }
     }
 
-    fun loadItemsForTypeDB(
+    private fun loadItemsForTypeDB(
         itemType: ItemType      = _selectedItemType.value,
-        searchTerms: String     = searchString.value,
+        searchTerms: String     = _searchString.value,
         page: Int               = _searchPage.value
 
-    ) {
-        viewModelScope.launch {
-            _isLoading.value    = true
-            _error.value        = null
-            _items.value        = emptyList()
+    ): Flow<List<Any>> {
+        _isLoading.value    = true
+        _error.value        = null
+        _items.value        = emptyList()
 
-            try {
-                val res: List<ItemData> = when (itemType) {
-                    ItemType.WEAPON -> weaponRepository.getItemsFromDatabase(searchTerms, page)
-                    else -> emptyList()
-                }
-                println(res)
-                _items.value = res
-
-            } catch (e: Exception) {
-                println("Exception loading items from the database... ${e.localizedMessage}")
-                _error.value = e.message
-            } finally {
-                _isLoading.value = false
-            }
+        val res = when (itemType) {
+            ItemType.WEAPON -> weaponRepository.getItemsFromDatabase(searchTerms, page)
+            ItemType.ARMOUR -> armourRepository.getItemsFromDatabase(searchTerms, page)
+            else -> emptyFlow()
         }
-    }
 
+        _isLoading.value    = false
+        _error.value        = null
+
+        return res
+    }
 }

@@ -81,8 +81,18 @@ fun ArmourInfo(armour: Armour) {
             verticalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth(),
         ) {
-            NumericStatsGridSection(title = "Damage Negation", data = armour.dmgNegation)
-            NumericStatsGridSection(title = "Resistance", data = armour.resistance)
+            armour.dmgNegation?.let {
+                NumericStatsGridSection(
+                    title = "Damage Negation",
+                    data = armour.dmgNegation
+                )
+            }
+            armour.resistance?.let {
+                NumericStatsGridSection(
+                    title = "Resistance",
+                    data = armour.resistance
+                )
+            }
         }
     }
 }
