@@ -38,8 +38,9 @@ fun NumericStatsGridSection(title: String, data: List<DoubleStat>) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-            Text(stat.name, style = MaterialTheme.typography.bodySmall) }
-            Text(stat.amount.toString(), style = MaterialTheme.typography.bodySmall)
+                Text(stat.name, style = MaterialTheme.typography.bodySmall)
+                Text(stat.amount.toString(), style = MaterialTheme.typography.bodySmall)
+            }
         }
     }
 }

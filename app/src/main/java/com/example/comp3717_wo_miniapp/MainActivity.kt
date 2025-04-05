@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.sharp.ArrowBack
+import androidx.compose.material.icons.sharp.Favorite
 import androidx.compose.material.icons.sharp.Home
 import androidx.compose.material.icons.sharp.Menu
 import androidx.compose.material3.Icon
@@ -37,6 +38,7 @@ import com.example.comp3717_wo_miniapp.data.repositories.ShieldRepository
 import com.example.comp3717_wo_miniapp.data.repositories.SorceryRepository
 import com.example.comp3717_wo_miniapp.data.repositories.TalismanRepository
 import com.example.comp3717_wo_miniapp.data.repositories.WeaponRepository
+import com.example.comp3717_wo_miniapp.states.EldenRingSavedViewModel
 import com.example.comp3717_wo_miniapp.states.EldenRingViewModel
 
 /**
@@ -80,7 +82,7 @@ fun BottomNavBar(navController: NavController) {
     // Define the navigation bar items
     val navItems = listOf(
         NavItem(Icons.Sharp.Home, "home"),
-        NavItem(Icons.Sharp.Menu, "bookmarks")
+        NavItem(Icons.Sharp.Favorite, "bookmarks")
     )
 
     NavigationBar {
@@ -127,6 +129,17 @@ class MainActivity : ComponentActivity() {
                     itemsRepo
                 )
             }
+            val eldenRingSavedViewModel = viewModel {
+                EldenRingSavedViewModel(
+                    weaponRepo,
+                    armourRepo,
+                    shieldRepo,
+                    sorceryRepo,
+                    incantationRepo,
+                    talismanRepo,
+                    itemsRepo
+                )
+            }
 
             val appNavController = rememberNavController()
             // Home(appNavController)
@@ -140,10 +153,10 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.padding(padding),
                 ) {
                     composable("home") {
-                        Home(appNavController)
+                        Home()
                     }
                     composable("bookmarks") {
-                        SavedItems(appNavController)
+                        SavedItems()
                     }
                 }
             }

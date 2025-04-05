@@ -1,5 +1,6 @@
 package com.example.comp3717_wo_miniapp.data.repositories
 
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.comp3717_wo_miniapp.data.AttackStatEntity
 import com.example.comp3717_wo_miniapp.data.DefenseStatEntity
 import com.example.comp3717_wo_miniapp.data.EldenRingDatabase
@@ -11,12 +12,15 @@ import com.example.comp3717_wo_miniapp.data.dataobjects.StatDao
 import com.example.comp3717_wo_miniapp.data.dataobjects.WeaponDao
 import com.example.comp3717_wo_miniapp.data.models.Weapon
 import com.example.comp3717_wo_miniapp.data.models.WeaponEntity
+import com.example.comp3717_wo_miniapp.data.models.WeaponWithStats
 import com.example.comp3717_wo_miniapp.data.models.Weapons
 import com.example.comp3717_wo_miniapp.data.models.toWeapon
 import com.example.comp3717_wo_miniapp.data.models.toWeaponEntity
 import com.example.comp3717_wo_miniapp.data.models.toWeaponWithStats
 import com.google.gson.Gson
 import io.ktor.client.HttpClient
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class WeaponRepository (
     override val eldenRingHttpClient:   HttpClient,
@@ -61,10 +65,22 @@ class WeaponRepository (
     /**
      * Returns weapons from the database.
      */
-    suspend fun getItemsFromDatabase(): List<Weapon> {
-        val db = eldenWeaponDao.getItems()
-        val dbConverts = db.map { it.toWeapon() }
-        return dbConverts
+    suspend fun getItemsFromDatabase(searchString: String?, page: Int): List<Weapon> {
+        val dbRes = if (searchString.isNullOrEmpty()) {
+            eldenWeaponDao.getItems(page)
+        } else {
+            eldenWeaponDao.getItems(searchString, page)
+        }
+        return dbRes.map {
+            it.toWeapon()
+        }
+    }
+
+    /**
+     * Removes a weapon from the database.
+     */
+    suspend fun removeFromDatabase(weapon: Weapon) {
+        eldenWeaponDao.deleteItem(weapon.toWeaponEntity())
     }
 
     /**

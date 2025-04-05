@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -21,7 +23,8 @@ import com.example.comp3717_wo_miniapp.composables.ItemInfo.ItemInfo
 import com.example.comp3717_wo_miniapp.composables.ItemListComposables.ItemListNavigator
 import com.example.comp3717_wo_miniapp.composables.ItemListComposables.ItemRow
 import com.example.comp3717_wo_miniapp.composables.ItemListComposables.ItemTypeSelector
-import com.example.comp3717_wo_miniapp.states.EldenRingViewModel
+import com.example.comp3717_wo_miniapp.states.EldenRingSavedViewModel
+
 
 /**
  * collectAsStateWithLifecycle
@@ -30,20 +33,20 @@ import com.example.comp3717_wo_miniapp.states.EldenRingViewModel
  *
  */
 @Composable
-fun ItemList() {
+fun SavedItemList() {
     val activityOwner = LocalContext.current as ViewModelStoreOwner
-    val eldenRingViewModel: EldenRingViewModel = viewModel(viewModelStoreOwner = activityOwner)
+    val eldenRingSavedViewModel: EldenRingSavedViewModel = viewModel(viewModelStoreOwner = activityOwner)
 
-    val selectedItemType    by eldenRingViewModel.selectedItemType.collectAsStateWithLifecycle()
-    val isLoading           by eldenRingViewModel.isLoading.collectAsStateWithLifecycle()
-    val error               by eldenRingViewModel.error.collectAsStateWithLifecycle()
-    val items               by eldenRingViewModel.items.collectAsStateWithLifecycle()
-    val infoItem            by eldenRingViewModel.infoItem.collectAsStateWithLifecycle()
+    val selectedItemType    by eldenRingSavedViewModel.selectedItemType.collectAsStateWithLifecycle()
+    val isLoading           by eldenRingSavedViewModel.isLoading.collectAsStateWithLifecycle()
+    val error               by eldenRingSavedViewModel.error.collectAsStateWithLifecycle()
+    val items               by eldenRingSavedViewModel.items.collectAsStateWithLifecycle()
+    val infoItem            by eldenRingSavedViewModel.infoItem.collectAsStateWithLifecycle()
 
     Column(modifier = Modifier.fillMaxSize()) {
         ItemTypeSelector(
             selectedItemType = selectedItemType,
-            onItemTypeSelected = eldenRingViewModel.setItemType
+            onItemTypeSelected = eldenRingSavedViewModel.setItemType
         )
         when {
             isLoading -> {
@@ -59,17 +62,18 @@ fun ItemList() {
             else -> {
                 Column {
                     ItemListNavigator(
-                        eldenRingViewModel.searchString,
-                        eldenRingViewModel.searchPage,
-                        eldenRingViewModel.incrementPage,
-                        eldenRingViewModel.decrementPage
+                        eldenRingSavedViewModel.searchString,
+                        eldenRingSavedViewModel.searchPage,
+                        eldenRingSavedViewModel.incrementPage,
+                        eldenRingSavedViewModel.decrementPage
                     )
                     LazyColumn(modifier = Modifier.weight(1f)) {
                         items(items, key = { it.id }) { itemData ->
                             ItemRow(
                                 itemData = itemData,
-                                onButtonOneClicked = eldenRingViewModel.showInfoItem,
-                                onButtonTwoClicked = eldenRingViewModel.saveItem
+                                onButtonOneClicked = eldenRingSavedViewModel.showInfoItem,
+                                onButtonTwoClicked = eldenRingSavedViewModel.deleteItem,
+                                iconButtonTwo = Icons.Default.Delete
                             )
                             HorizontalDivider()
                         }
@@ -80,7 +84,7 @@ fun ItemList() {
         infoItem?.let { itemToShowInfo ->
             ItemInfo(
                 itemData = itemToShowInfo,
-                onDismissRequest = eldenRingViewModel.dismissInfoItem
+                onDismissRequest = eldenRingSavedViewModel.dismissInfoItem
             )
         }
     }

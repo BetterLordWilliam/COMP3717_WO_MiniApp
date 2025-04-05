@@ -1,7 +1,6 @@
 package com.example.comp3717_wo_miniapp.composables.ItemListComposables
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
@@ -15,16 +14,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.ViewModelStoreOwner
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.comp3717_wo_miniapp.states.EldenRingViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
-fun ItemListNavigator() {
-    val activityOwner = LocalContext.current as ViewModelStoreOwner
-    val eldenRingViewModel: EldenRingViewModel = viewModel(viewModelStoreOwner = activityOwner)
+fun ItemListNavigator(
 
+    searchField: MutableStateFlow<String>,
+    searchPage: StateFlow<Int>,
+    navigatorForward: () -> Unit,
+    navigatorBackward: () -> Unit
+
+) {
     Row (
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
@@ -32,14 +33,14 @@ fun ItemListNavigator() {
             .fillMaxWidth()
     ) {
         TextField(
-            value = eldenRingViewModel.searchString.collectAsState().value,
-            onValueChange = { eldenRingViewModel.searchString.value = it; }
+            value = searchField.collectAsState().value,
+            onValueChange = { searchField.value = it; }
         )
-        IconButton({ eldenRingViewModel.decrementPage() }) {
+        IconButton(navigatorBackward) {
             Icon(Icons.Default.KeyboardArrowLeft, contentDescription = "Previous Page")
         }
-        Text(text = "${eldenRingViewModel.searchPage.collectAsState().value}")
-        IconButton({ eldenRingViewModel.incrementPage() }) {
+        Text(text = "${searchPage.collectAsState().value}")
+        IconButton(navigatorForward) {
             Icon(Icons.Default.KeyboardArrowRight, contentDescription = "Next page")
         }
     }

@@ -1,11 +1,10 @@
 package com.example.comp3717_wo_miniapp.data.dataobjects
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import com.example.comp3717_wo_miniapp.data.ScalingStatsEntity
 import com.example.comp3717_wo_miniapp.data.models.Weapon
 import com.example.comp3717_wo_miniapp.data.models.WeaponEntity
 import com.example.comp3717_wo_miniapp.data.models.WeaponWithStats
@@ -13,21 +12,21 @@ import com.example.comp3717_wo_miniapp.data.models.WeaponWithStats
 @Dao
 interface WeaponDao {
 
-//    @Query("SELECT * FROM er_weapons")
-//    suspend fun getItems(): List<WeaponEntity>
+    @Transaction
+    @Query("SELECT * FROM er_weapons LIMIT 20 OFFSET :intPage*20")
+    suspend fun getItems(intPage: Int = 0): List<WeaponWithStats>
+
+    // SQLlite string cat
+    // https://stackoverflow.com/questions/44184769/android-room-select-query-with-like
 
     @Transaction
-    @Query("SELECT * FROM er_weapons")
-    suspend fun getItems(): List<WeaponWithStats>
+    @Query("SELECT * FROM er_weapons WHERE name LIKE '%' || :searchString || '%' LIMIT 20 OFFSET :intPage*20")
+    suspend fun getItems(searchString: String, intPage: Int = 0): List<WeaponWithStats>
 
-//    @Transaction
-//    @Insert(onConflict = OnConflictStrategy.REPLACE)
-//    suspend fun insertWeaponWithStats(weaponWithStats: WeaponWithStats)
+    @Delete
+    suspend fun deleteItem(weapon: WeaponEntity)
 
-    // @Transaction
-    // @Query("SELECT * FROM er_weapons WHERE id = :weaponId")
-    // suspend fun getWeaponWithStats(weaponId: String): WeaponWithAllStats?
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert
     suspend fun insertItem(weapon: WeaponEntity)
+
 }
