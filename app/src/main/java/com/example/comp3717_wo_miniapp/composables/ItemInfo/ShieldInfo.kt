@@ -81,10 +81,10 @@ fun ShieldInfo(shield: Shield) {
             verticalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth(),
         ) {
-            NumericStatsGridSection(title = "Attack", data = shield.attack)
-            NumericStatsGridSection(title = "Defense", data = shield.defence)
-            NumericStatsGridSection(title = "Requirements", data = shield.reqAt)
-            StringStatsGridSection(title = "Scales With", data = shield.scalesWith)
+            shield.attack?.let{ NumericStatsGridSection(title = "Attack", data = it) }
+            shield.defence?.let { NumericStatsGridSection(title = "Defense", data = it) }
+            shield.reqAt?.let { NumericStatsGridSection(title = "Requirements", data = it) }
+            shield.scalesWith?.let { StringStatsGridSection(title = "Scales With", data = it) }
         }
     }
 }

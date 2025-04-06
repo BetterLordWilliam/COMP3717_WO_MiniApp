@@ -5,6 +5,7 @@ import com.example.comp3717_wo_miniapp.data.dataobjects.ArmourDao
 import com.example.comp3717_wo_miniapp.data.dataobjects.StatDao
 import com.example.comp3717_wo_miniapp.data.entites.ArmourEntity
 import com.example.comp3717_wo_miniapp.data.entites.ArmourWithStats
+import com.example.comp3717_wo_miniapp.data.entites.toArmour
 import com.example.comp3717_wo_miniapp.data.models.Armour
 import com.example.comp3717_wo_miniapp.data.models.Armours
 import com.example.comp3717_wo_miniapp.data.models.toArmourEntity
@@ -15,8 +16,8 @@ import kotlinx.coroutines.flow.map
 
 class ArmourRepository(
     override val eldenRingHttpClient:   HttpClient,
-    val statDao:                        StatDao,
-    val armourDao:                      ArmourDao
+    private val statDao:                        StatDao,
+    private val armourDao:                      ArmourDao
 
 ) : EldenRingItemRepository<Armour>() {
 
@@ -44,16 +45,7 @@ class ArmourRepository(
 
         return armourEntities.map {
            it.map { armourWithStats ->
-               Armour(
-                   id = armourWithStats.armour.id,
-                   name = armourWithStats.armour.name,
-                   imageUrl = armourWithStats.armour.imageUrl,
-                   description = armourWithStats.armour.description,
-                   category = armourWithStats.armour.category,
-                   weight = armourWithStats.armour.weight,
-                   dmgNegation = armourWithStats.dmgNegation,
-                   resistance = armourWithStats.resistance
-               )
+                armourWithStats.toArmour()
            }
         }
     }
@@ -70,14 +62,7 @@ class ArmourRepository(
      */
     override suspend fun saveItemToDatabase(item: Armour) {
 
-        val armourEntity = ArmourEntity(
-            id = item.id,
-            name = item.name,
-            imageUrl = item.imageUrl,
-            description = item.description,
-            category = item.category,
-            weight = item.weight
-        )
+        val armourEntity = item.toArmourEntity()
 
         armourDao.insertItem(armourEntity)
 

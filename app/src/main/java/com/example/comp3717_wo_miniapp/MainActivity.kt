@@ -104,14 +104,15 @@ fun BottomNavBar(navController: NavController) {
 class MainActivity : ComponentActivity() {
 
     // Lazy declare EldenRing repositories
+    // Maybe there is a better way of doing dependency injection...
     private val erDb            by lazy { EldenRingDB.getDatabase(applicationContext) }
     private val weaponRepo      by lazy { WeaponRepository(eldenRingHttpClient, erDb.statDao(), erDb.weaponDao()) }
     private val armourRepo      by lazy { ArmourRepository(eldenRingHttpClient, erDb.statDao(), erDb.armourDao()) }
-    private val shieldRepo      by lazy { ShieldRepository(eldenRingHttpClient) }
-    private val sorceryRepo     by lazy { SorceryRepository(eldenRingHttpClient) }
-    private val incantationRepo by lazy { IncantationRepository(eldenRingHttpClient) }
-    private val talismanRepo    by lazy { TalismanRepository(eldenRingHttpClient) }
-    private val itemsRepo       by lazy { ItemsRepository(eldenRingHttpClient) }
+    private val shieldRepo      by lazy { ShieldRepository(eldenRingHttpClient, erDb.statDao(), erDb.shieldDao()) }
+    private val sorceryRepo     by lazy { SorceryRepository(eldenRingHttpClient, erDb.statDao(), erDb.sorceryDao()) }
+    private val incantationRepo by lazy { IncantationRepository(eldenRingHttpClient, erDb.statDao(), erDb.incantationDao()) }
+    private val talismanRepo    by lazy { TalismanRepository(eldenRingHttpClient, erDb.talismanDao()) }
+    private val itemsRepo       by lazy { ItemsRepository(eldenRingHttpClient, erDb.itemDao()) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

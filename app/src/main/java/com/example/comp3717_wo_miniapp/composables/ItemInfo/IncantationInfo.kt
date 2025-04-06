@@ -80,6 +80,6 @@ fun IncantationInfo(incantation: Incantation) {
                 }
             }
         }
-        NumericStatsGridSection(title = "Requirements", data = incantation.requires)
+        incantation.requires?.let { NumericStatsGridSection(title = "Requirements", data = incantation.requires) }
     }
 }

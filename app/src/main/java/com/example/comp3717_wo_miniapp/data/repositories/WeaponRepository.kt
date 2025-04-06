@@ -16,8 +16,8 @@ import kotlinx.coroutines.flow.map
 
 class WeaponRepository (
     override val eldenRingHttpClient:   HttpClient,
-    val statDao:                        StatDao,
-    val eldenWeaponDao:                 WeaponDao
+    private val statDao:                StatDao,
+    private val eldenWeaponDao:         WeaponDao
 
 ) : EldenRingItemRepository<Weapon>() {
 
@@ -39,14 +39,7 @@ class WeaponRepository (
      * Inserts a new weapon to the database.
      */
     override suspend fun saveItemToDatabase(item: Weapon) {
-        val weaponEntity = WeaponEntity(
-            id = item.id,
-            imageUrl = item.imageUrl,
-            name = item.name,
-            description = item.description,
-            category = item.category,
-            weight = item.weight
-        )
+        val weaponEntity = item.toWeaponEntity()
 
         eldenWeaponDao.insertItem(weaponEntity)
 
@@ -79,18 +72,7 @@ class WeaponRepository (
         }
         return dbRes.map {
             it.map { weaponWithStats ->
-                Weapon(
-                    id = weaponWithStats.weapon.id,
-                    name = weaponWithStats.weapon.name,
-                    imageUrl = weaponWithStats.weapon.imageUrl,
-                    description = weaponWithStats.weapon.description,
-                    category = weaponWithStats.weapon.category,
-                    weight = weaponWithStats.weapon.weight,
-                    attack = weaponWithStats.attack,
-                    defence = weaponWithStats.defence,
-                    reqAt = weaponWithStats.reqAt,
-                    scalesWith = weaponWithStats.scalesWith
-                )
+                weaponWithStats.toWeapon()
             }
         }
     }

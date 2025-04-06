@@ -1,14 +1,20 @@
 package com.example.comp3717_wo_miniapp.data.repositories
 
 import com.example.comp3717_wo_miniapp.data.ITEM
+import com.example.comp3717_wo_miniapp.data.dataobjects.ItemDao
+import com.example.comp3717_wo_miniapp.data.entites.toItem
+import com.example.comp3717_wo_miniapp.data.entites.toTalisman
 import com.example.comp3717_wo_miniapp.data.models.Item
 import com.example.comp3717_wo_miniapp.data.models.Items
+import com.example.comp3717_wo_miniapp.data.models.toItemEntity
 import com.google.gson.Gson
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class ItemsRepository(
-    override val eldenRingHttpClient: HttpClient
+    override val eldenRingHttpClient: HttpClient,
+    private val itemDao: ItemDao
 
 ) : EldenRingItemRepository<Item>() {
 
@@ -23,14 +29,23 @@ class ItemsRepository(
     }
 
     override fun getItemsFromDatabase(searchString: String?, page: Int): Flow<List<Item>> {
-        TODO("Not yet implemented")
+        val itemFlow = if (searchString == null) {
+            itemDao.getItems(page)
+        } else {
+            itemDao.getItems(searchString, page)
+        }
+        return itemFlow.map { itemList ->
+            itemList.map { item ->
+                item.toItem()
+            }
+        }
     }
 
     override suspend fun removeItemFromDatabase(item: Item) {
-        TODO("Not yet implemented")
+        itemDao.deleteItem(item.toItemEntity())
     }
 
     override suspend fun saveItemToDatabase(item: Item) {
-        TODO("Not yet implemented")
+        itemDao.insertItem(item.toItemEntity())
     }
 }

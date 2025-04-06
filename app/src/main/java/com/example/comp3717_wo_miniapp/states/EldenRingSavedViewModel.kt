@@ -1,12 +1,16 @@
 package com.example.comp3717_wo_miniapp.states
 
 import android.database.sqlite.SQLiteConstraintException
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.comp3717_wo_miniapp.ItemType
 import com.example.comp3717_wo_miniapp.data.entites.ItemData
 import com.example.comp3717_wo_miniapp.data.models.Armour
+import com.example.comp3717_wo_miniapp.data.models.Incantation
+import com.example.comp3717_wo_miniapp.data.models.Item
+import com.example.comp3717_wo_miniapp.data.models.Shield
+import com.example.comp3717_wo_miniapp.data.models.Sorcery
+import com.example.comp3717_wo_miniapp.data.models.Talisman
 import com.example.comp3717_wo_miniapp.data.models.Weapon
 import com.example.comp3717_wo_miniapp.data.repositories.ArmourRepository
 import com.example.comp3717_wo_miniapp.data.repositories.IncantationRepository
@@ -24,9 +28,9 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 
+@OptIn(FlowPreview::class)
 class EldenRingSavedViewModel(
 
     private val weaponRepository: WeaponRepository,
@@ -105,6 +109,7 @@ class EldenRingSavedViewModel(
 
     val updatedSearchString: (String) -> Unit = { newTerms ->
         _searchString.value = newTerms
+        _searchPage.value = 0
     }
 
     /**
@@ -134,9 +139,12 @@ class EldenRingSavedViewModel(
                 when (_selectedItemType.value) {
                     ItemType.WEAPON -> weaponRepository.removeItemFromDatabase(infoItem as Weapon)
                     ItemType.ARMOUR -> armourRepository.removeItemFromDatabase(infoItem as Armour)
-                    else -> println("WOW bad")
+                    ItemType.SHIELD -> shieldRepository.removeItemFromDatabase(infoItem as Shield)
+                    ItemType.INCANTATION -> incantationRepository.removeItemFromDatabase(infoItem as Incantation)
+                    ItemType.SORCERY -> sorceryRepository.removeItemFromDatabase(infoItem as Sorcery)
+                    ItemType.TALISMAN -> talismanRepository.removeItemFromDatabase(infoItem as Talisman)
+                    ItemType.ITEM -> itemRepository.removeItemFromDatabase(infoItem as Item)
                 }
-                loadItemsForTypeDB()
 
             } catch (exception: SQLiteConstraintException) {
                 println("Error inserting item into the database: ${exception}")
@@ -157,7 +165,11 @@ class EldenRingSavedViewModel(
         val res = when (itemType) {
             ItemType.WEAPON -> weaponRepository.getItemsFromDatabase(searchTerms, page)
             ItemType.ARMOUR -> armourRepository.getItemsFromDatabase(searchTerms, page)
-            else -> emptyFlow()
+            ItemType.SHIELD -> shieldRepository.getItemsFromDatabase(searchTerms, page)
+            ItemType.INCANTATION -> incantationRepository.getItemsFromDatabase(searchTerms, page)
+            ItemType.SORCERY -> sorceryRepository.getItemsFromDatabase(searchTerms, page)
+            ItemType.TALISMAN -> talismanRepository.getItemsFromDatabase(searchTerms, page)
+            ItemType.ITEM -> itemRepository.getItemsFromDatabase(searchTerms, page)
         }
 
         _isLoading.value    = false

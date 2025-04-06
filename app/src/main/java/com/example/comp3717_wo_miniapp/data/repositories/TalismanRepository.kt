@@ -1,14 +1,22 @@
 package com.example.comp3717_wo_miniapp.data.repositories
 
 import com.example.comp3717_wo_miniapp.data.TALISMAN
+import com.example.comp3717_wo_miniapp.data.dataobjects.StatDao
+import com.example.comp3717_wo_miniapp.data.dataobjects.TalismanDao
+import com.example.comp3717_wo_miniapp.data.entites.toIncantation
+import com.example.comp3717_wo_miniapp.data.entites.toTalisman
 import com.example.comp3717_wo_miniapp.data.models.Talisman
 import com.example.comp3717_wo_miniapp.data.models.Talismans
+import com.example.comp3717_wo_miniapp.data.models.toSorceryEntity
+import com.example.comp3717_wo_miniapp.data.models.toTalismanEntity
 import com.google.gson.Gson
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class TalismanRepository(
-    override val eldenRingHttpClient: HttpClient
+    override val eldenRingHttpClient: HttpClient,
+    private val talismanDao: TalismanDao
 
 ) : EldenRingItemRepository<Talisman>() {
 
@@ -23,14 +31,24 @@ class TalismanRepository(
     }
 
     override fun getItemsFromDatabase(searchString: String?, page: Int): Flow<List<Talisman>> {
-        TODO("Not yet implemented")
+        val talismanFlow = if (searchString == null) {
+            talismanDao.getItems(page)
+        } else {
+            talismanDao.getItems(searchString, page)
+        }
+        return talismanFlow.map { talismanList ->
+            talismanList.map { talisman ->
+                talisman.toTalisman()
+            }
+        }
     }
 
     override suspend fun removeItemFromDatabase(item: Talisman) {
-        TODO("Not yet implemented")
+        talismanDao.deleteItem(item.toTalismanEntity())
     }
 
     override suspend fun saveItemToDatabase(item: Talisman) {
-        TODO("Not yet implemented")
+        val talismanEntity = item.toTalismanEntity()
+        talismanDao.insertItem(talismanEntity)
     }
 }

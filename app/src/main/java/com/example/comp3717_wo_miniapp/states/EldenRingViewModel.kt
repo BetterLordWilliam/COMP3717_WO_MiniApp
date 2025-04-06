@@ -6,6 +6,11 @@ import androidx.lifecycle.viewModelScope
 import com.example.comp3717_wo_miniapp.ItemType
 import com.example.comp3717_wo_miniapp.data.entites.ItemData
 import com.example.comp3717_wo_miniapp.data.models.Armour
+import com.example.comp3717_wo_miniapp.data.models.Incantation
+import com.example.comp3717_wo_miniapp.data.models.Item
+import com.example.comp3717_wo_miniapp.data.models.Shield
+import com.example.comp3717_wo_miniapp.data.models.Sorcery
+import com.example.comp3717_wo_miniapp.data.models.Talisman
 import com.example.comp3717_wo_miniapp.data.models.Weapon
 import com.example.comp3717_wo_miniapp.data.repositories.ArmourRepository
 import com.example.comp3717_wo_miniapp.data.repositories.IncantationRepository
@@ -106,6 +111,7 @@ class EldenRingViewModel (
 
     val updatedSearchString:  (String) -> Unit = { newTerms ->
         _searchString.value = newTerms
+        _searchPage.value = 0
     }
 
     /**
@@ -135,6 +141,11 @@ class EldenRingViewModel (
                 when (_selectedItemType.value) {
                     ItemType.WEAPON -> weaponRepository.saveItemToDatabase(infoItem as Weapon)
                     ItemType.ARMOUR -> armourRepository.saveItemToDatabase(infoItem as Armour)
+                    ItemType.SHIELD -> shieldRepository.saveItemToDatabase(infoItem as Shield)
+                    ItemType.INCANTATION -> incantationRepository.saveItemToDatabase(infoItem as Incantation)
+                    ItemType.SORCERY -> sorceryRepository.saveItemToDatabase(infoItem as Sorcery)
+                    ItemType.TALISMAN -> talismanRepository.saveItemToDatabase(infoItem as Talisman)
+                    ItemType.ITEM -> itemRepository.saveItemToDatabase(infoItem as Item)
                     else -> println("WOW bad")
                 }
 
