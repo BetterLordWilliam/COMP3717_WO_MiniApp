@@ -36,8 +36,8 @@ fun StringStatsGridSection(title: String, data: List<StringStat>) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(stat.name, style = MaterialTheme.typography.bodySmall)
-                Text(stat.scaling, style = MaterialTheme.typography.bodySmall)
+                stat.name?.let { Text(it, style = MaterialTheme.typography.bodySmall) }
+                stat.scaling?.let{ Text(it, style = MaterialTheme.typography.bodySmall) }
             }
         }
     }

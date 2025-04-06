@@ -22,14 +22,14 @@ interface ItemGroup {
 }
 
 interface DoubleStat {
-    val name:       String
-    val amount:     Double
+    val name:       String?
+    val amount:     Double?
     var parentId:   String?
 }
 
 interface StringStat {
-    val name:       String
-    val scaling:    String
+    val name:       String?
+    val scaling:    String?
     var parentId:   String?
 }
 
@@ -39,9 +39,9 @@ interface StringStat {
         Index(value = ["parentId", "name", "amount"], unique = true)
     ])
 data class AttackStatEntity (
-    override val name:      String,
-    override val amount:    Double,
-    override var parentId: String? = null,
+    override val name:      String?,
+    override val amount:    Double?,
+    override var parentId:  String? = null,
     @PrimaryKey(autoGenerate = true) val id: Int = 0
 ) : DoubleStat
 
@@ -51,8 +51,8 @@ data class AttackStatEntity (
         Index(value = ["parentId", "name", "amount"], unique = true)
     ])
 data class RequiredAttributeStatEntity (
-    override val name:      String,
-    override val amount:    Double,
+    override val name:      String?,
+    override val amount:    Double?,
     override var parentId:  String? = null,
     @PrimaryKey(autoGenerate = true) val id: Int = 0
 ) : DoubleStat
@@ -63,8 +63,8 @@ data class RequiredAttributeStatEntity (
         Index(value = ["parentId", "name", "scaling"], unique = true)
     ])
 data class ScalingStatsEntity (
-    override val name:      String,
-    override val scaling:   String,
+    override val name:      String?,
+    override val scaling:   String?,
     override var parentId:  String? = null,
     @PrimaryKey(autoGenerate = true) val id: Int = 0
 ) : StringStat
@@ -75,8 +75,8 @@ data class ScalingStatsEntity (
         Index(value = ["parentId", "name", "amount"], unique = true)
     ])
 data class DamageNegationStatsEntity(
-    override val name:      String,
-    override val amount:    Double,
+    override val name:      String?,
+    override val amount:    Double?,
     override var parentId:  String? = null,
     @PrimaryKey(autoGenerate = true) val id: Int = 0
 ) : DoubleStat
@@ -87,8 +87,8 @@ data class DamageNegationStatsEntity(
         Index(value = ["parentId", "name", "amount"], unique = true),
     ])
 data class DefenceStatEntity(
-    override val name:      String,
-    override val amount:    Double,
+    override val name:      String?,
+    override val amount:    Double?,
     override var parentId:  String? = null,
     @PrimaryKey(autoGenerate = true) val id: Int = 0
 ) : DoubleStat
@@ -99,8 +99,8 @@ data class DefenceStatEntity(
         Index(value = ["parentId", "name", "amount"], unique = true)
     ])
 data class ResistenceStatsEntity(
-    override val name:      String,
-    override val amount:    Double,
+    override val name:      String?,
+    override val amount:    Double?,
     override var parentId:  String? = null,
     @PrimaryKey(autoGenerate = true) val id: Int = 0
 ) : DoubleStat

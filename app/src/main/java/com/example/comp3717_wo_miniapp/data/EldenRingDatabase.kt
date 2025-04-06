@@ -40,7 +40,7 @@ import com.example.comp3717_wo_miniapp.data.entites.TalismanEntity
     TalismanEntity::class,
     ArmourEntity::class,
     ItemEntity::class,
- ], version = 16)
+ ], version = 17)
 abstract class EldenRingDatabase : RoomDatabase() {
     abstract fun weaponDao(): WeaponDao
     abstract fun statDao(): StatDao
